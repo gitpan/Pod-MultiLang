@@ -2,7 +2,7 @@
 =head1 NAME
 
 mlpod2pod - MultiLang-pod into just a normal pod
-J<< ja;mlpod2pod - 多言語 pod をただの pod に変換 >>
+J<< ja;mlpod2pod - 多言語 pod を通常の pod に変換 >>
 
 =head1 SYNOPSIS
 
@@ -11,10 +11,8 @@ J<< ja;mlpod2pod - 多言語 pod をただの pod に変換 >>
 =head1 DESCRIPTION
 
 turn multilang pod into just a normal pod.
-this is simple loose script not using Pod::Parser.
 J<< ja;
-多言語 pod をただの pod に変換します.
-L<Pod::Parser> を使用していないただのスクリプトです.
+多言語 pod を通常の pod に変換します.
 >>
 
 =head1 OPTIONS
@@ -77,14 +75,7 @@ J<< ja;
 
 =back
 
-=head1 HISTORY
-
- v0.01 initial version
-
 =head1 SEE ALSO
 
 L<Pod::MultiLang>
-J<< ja;
-L<Pod::MultiLang>
->>
 

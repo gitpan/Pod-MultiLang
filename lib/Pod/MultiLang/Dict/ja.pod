@@ -2,8 +2,11 @@
 
 Pod::MultiLang::Dict::ja - heading dictionary for Japanese
 
+
 =head1 SYNOPSIS
 
  use Pod::MultiLang::Dict;
  Pod::MultiLang::Dict->load_dict(qw(ja));
+
+
 

@@ -8,6 +8,7 @@ my @MLPODFILES = qw( bin/mlpod2html.mlpod
                      lib/Pod/MultiLang/Dict.mlpod
                      lib/Pod/MultiLang/Dict/ja.mlpod
                      lib/Pod/MultiLang/Html.mlpod
+                     lib/Pod/MultiLang/Pod.mlpod
                     );
 
 my %ATTR = 

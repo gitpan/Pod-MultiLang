@@ -5,7 +5,7 @@
 #
 # Copyright 2003 YMIRLINK,Inc.
 # -----------------------------------------------------------------------------
-# $Id: Html.pm,v 1.12 2004/08/01 04:02:50 hio Exp $
+# $Id: Html.pm,v 1.14 2004/08/14 11:09:10 hio Exp $
 # -----------------------------------------------------------------------------
 package Pod::MultiLang::Html;
 use strict;
@@ -774,7 +774,7 @@ sub buildtitle
   
   # [langs..,,no-lang];
   my @list = $parser->_buildhtml_parse($parser->parse_text($paraobj->text()));
-  my $plain_title = 'untitled';
+  my $plain_title;
   for( my $i=0; $i<=$#{$parser->{langs}}; ++$i )
   {
     if( defined($list[$i]) )
@@ -786,6 +786,10 @@ sub buildtitle
       $plain_title = $list[-1];
       last;
     }
+  }
+  if( !defined($plain_title) )
+  {
+    $plain_title = defined($list[-1]) ? $list[-1] : 'untitled';
   }
   $plain_title =~ s/<.*?>//g;
   $plain_title =~ s/^\s+//;
@@ -818,6 +822,12 @@ sub buildtitle
     }
   }
   my $html = join("<br />\n",grep{defined}@list[0..$#{$parser->{langs}}]);
+  if( $html eq '' )
+  {
+    my $txt = defined($list[-1]) ? $list[-1] : 'untitled';
+    my $cls = "$parser->{_cssprefix}lang_default";
+    $html = qq(<span class="$cls">$txt</span>);
+  }
   my $cls = "$parser->{_cssprefix}title_block";
   my $block_title = qq(<div class="$cls">\n$html\n</div>\n\n);
   ($plain_title,$block_title);
@@ -975,7 +985,7 @@ sub rebuild
     {
       my $para = $parser->{paras}[$pos];
       # TODO: ID が NAME だったり 名前 だったり..
-      $para->[PARAINFO_TYPE]==PARA_HEAD && ($para->[PARAINFO_ID] eq 'NAME' || $para->[PARAINFO_ID] eq 'Xe5X90X8dXe5X89X8d' || $para->[PARAINFO_ID] eq 'X')
+      $para->[PARAINFO_TYPE]==PARA_HEAD && ($para->[PARAINFO_ID] =~ /^NAME/ || $para->[PARAINFO_ID] =~ /^Xe5X90X8dXe5X89X8d/ || $para->[PARAINFO_ID] eq 'X')
 	or next;
       
       # found "=head<n> NAME"
@@ -1235,7 +1245,17 @@ sub output_html
     }elsif( $paratype==PARA_OVER )
     {
       my ($type) = $_->[PARAINFO_LISTTYPE];
-      $outtext = "<$type>\n";
+      $outtext = '';
+      if( defined($type) )
+      {
+        $outtext .= "<$type>\n";
+      }else
+      {
+        warn "over type unknown, using ul";
+        $type = 'ul';
+        $outtext .= "<!-- listtype of =over undefined, using $type -->\n";
+        $outtext .= "<$type>\n";
+      }
       $first_item = 1;
       my @stk;
       @stk[STK_PARAOBJ,STK_BEHAVIOR] = ($_,BHV_NORMAL);

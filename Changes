@@ -1,5 +1,9 @@
 (ja.utf-8)
 
+ v0.08 (2004/08/14)
+       [ja] mlpod2pod の書き直し
+       [en] rewrite mlpod2pod
+
  v0.07 (2004/08/01)
        [ja] バグ修正
        [en] fix some bugs
@@ -50,4 +54,4 @@
        [ja] 初版
        [en] initial version
 
-$Id: Changes,v 1.12 2004/08/01 04:02:48 hio Exp $
+$Id: Changes,v 1.13 2004/08/14 09:00:30 hio Exp $

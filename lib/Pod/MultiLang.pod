@@ -2,6 +2,7 @@
 
 Pod::MultiLang - multi languages in Pod
 
+
 =head1 SYNOPSIS
 
   use Pod::MultiLang::Html;
@@ -18,7 +19,9 @@ Some heading words are translated automatically.
 Note that JZ<><> is not official interior sequence, 
 this is custom one.
 
+
 New format for LZ<><|/> interior sequence is:
+
 
  J<<< ja;
  L<< text | page /"heading J<ja; japanese heading >" >>
@@ -28,11 +31,14 @@ At section part, English heading is still required.
 Because in many hypertext formats, link identifier is 
 restricted into ASCII.
 
+
 Verbatim paragraphs will be joined with one blank line.
+
 
 =head1 EXAMPLE
 
 (with ja.utf8)
+
 
   =head1 NAME
   
@@ -50,6 +56,7 @@ Verbatim paragraphs will be joined with one blank line.
 
 sample output.
 
+
  en:NAME
  ja:名前
  en:  Example - Example document
@@ -59,62 +66,29 @@ sample output.
  en:  "somewhere" in example (linkto:example/somewhere)
  ja:  example 内 "どこか" (linkto:example/somewhere)
 
-=begin COMMENT
-
-JZ<><<>>の外をデフォルト言語にして処理.
-
-  content
-  J<< xx;content-in-xx >>
-
-とあったときに,
-
-  J<< (default-lang);content >>
-  J<< xx;content-in-xx >>
-
-で処理.
-でも,
-
-  content
-
-だけなら, 言語指定なしでそのまま
-
-  content
-
-で出力.
-
-=end COMMENT
-
+<!-- begin [COMMENT] behavior [ignore] -->
 =head1 TODO
 
 Multi lingual verbatim paragraph is not supported.
 
-=begin COMMENT
 
- default text.
- 
- =begin :block
- 
- =for mlpodopt lang ja
- 
-  japanese verbatim block.
-
- =for mlpodopt lang fr
- 
-  un bloc verbatim en francais
-
- =end :block
-
-=end COMMENT
-
-=begin COMMENT
-
-JZ<>< *;for all langs, e.g. COPYRIGHT text >.
-
-=end COMMENT
-
+<!-- begin [COMMENT] behavior [ignore] -->
+<!-- begin [COMMENT] behavior [ignore] -->
 JZ<>< en,ja;for English and Japanese >.
+
+
+=head1 UTILITY METHODS
+
+=head2 makelinktext
+
+ $label = $parser->makelinktext($lang,$text,$name,$sec);
+
+if $text is specified, returns $text.
+if not, returns by $name and $sec with $lang.
+
 
 =head1 SEE ALSO
 
 L<Pod::Parser>, L<Pod::MultiLang::Html>
+
 

@@ -2,6 +2,7 @@
 
 Pod::MultiLang::Dict - heading dictionary manager
 
+
 =head1 SYNOPSIS
 
  my $dictmgr = Pod::MultiLang::Dict->new();
@@ -12,8 +13,10 @@ Pod::MultiLang::Dict - heading dictionary manager
 
 heading word transrate dictionary for Pod::MultiLang.
 
+
 dictional for each language is placed at Pod::MultiLang::Dict::xx.
 loaded by use statement from load_dict;
+
 
 =head1 METHODS
 
@@ -26,6 +29,7 @@ loaded by use statement from load_dict;
 create an instance.
 but all instance has same condition.
 
+
 =item load_dict
 
   $dictmgr->load_dict(@langs);
@@ -33,12 +37,14 @@ but all instance has same condition.
 
 load dictionary for specified languals.
 
+
 =item find_word
 
   @multilingual = $dictmgr->find_word(\@langs,$text);
 
 translate english to other.
 "a AND b" is acceptable.
+
 
 =back
 
@@ -53,12 +59,14 @@ translate english to other.
 returns hash reference which constains 
 'english' => 'translated'.
 
+
 =item make_linktext
 
   $text = $dictmgr->make_linktext($lang,$name,$section);
 
 make link text for LZ<><> interior sequence which has 
 no text part.
+
 
 =back
 

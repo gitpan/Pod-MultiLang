@@ -1,18 +1,19 @@
 #!/usr/local/ymir/perl/bin/perl -w
 ## ----------------------------------------------------------------------------
 #  mlpod2pod
-#    多言語Podを通常podに変換
+#    convert mlpod into normal pod.
 # -----------------------------------------------------------------------------
 # Mastering programed by YAMASHINA Hio
 #
 # Copyright 2003 YMIRLINK,Inc.
 # -----------------------------------------------------------------------------
-# $Id: mlpod2pod,v 1.3 2003/09/14 09:05:21 hio Exp $
+# $Id: mlpod2pod,v 1.4 2004/08/14 09:00:31 hio Exp $
 # -----------------------------------------------------------------------------
 package Mlpod2pod;
 use strict;
 
 use Encode;
+use Pod::MultiLang::Pod;
 BEGIN
 {
   if( 0 )
@@ -20,14 +21,10 @@ BEGIN
     # for debug
     eval
     {
-      ($SIG{__DIE__})='DEFAULT';
       require Diehook;
-    };
-    if( !$@ )
-    {
       Diehook->addhook();
       #Diehook->addwarnhook();
-    }
+    };
   }
 }
 
@@ -35,7 +32,7 @@ my @arraykeys = qw( langs );
 my @paramkeys = qw( default-lang auto-out );
 
 # -----------------------------------------------------------------------------
-# mlpod2pod 起動.
+# startup.
 #
 if( !caller() )
 {
@@ -43,7 +40,7 @@ if( !caller() )
 }
 
 # -----------------------------------------------------------------------------
-# 処理
+# process.
 #
 sub do_work
 {
@@ -62,6 +59,13 @@ sub do_work
     {
       my $v = shift;
       $opt{outfile} = ($v=~/(.*)/)[0];
+    }elsif( $_ =~ /^(-h|--help)$/ )
+    {
+      (my $prog = $0) =~ s/.*\///;
+      print qq/usage:\n/;
+      print qq/  $prog [-h|--help]\n/;
+      print qq/  $prog --langs=ja,en [-o outfile] infile \n/;
+      return;
     }elsif( /^--([\w-]+)(=?)(.*)$/ )
     {
       my ($k,$set,$v) = ($1,$2,$3);
@@ -120,86 +124,6 @@ sub do_work
     } # foreach
   }
 }
-
-# -----------------------------------------------------------------------------
-# 仮の mlpod2pod
-#
-package Pod::MultiLang::Pod;
-sub new
-{
-  my $pkg = shift;
-  my %opt = @_;
-  my $this = bless{},$pkg;
-  
-  $this->{opt_langs} = $opt{langs} || [qw(en)];
-  $this->{opt_default_lang} = $opt{default_lang} || 'en';
-  $this;
-}
-sub parse_from_file
-{
-  my ($this,$infile,$outfile) = @_;
-  my $in  = $this->_to_handle($infile,'in');
-  my $out = $this->_to_handle($outfile,'out');
-  local($/);
-  my $text = <$in>;
-  my $topspc = $text =~ s/^(\n+)//s ? $1 : '';
-  my @paras = split(/(\n\n+)/,$text);
-  my $def_in_langs = grep{$_  eq $this->{opt_default_lang}}@{$this->{opt_langs}};
-  foreach(@paras)
-  {
-    /^\s/s and next;
-    my $command = s/^(=\w+\s+)//s ? $1 : '';
-    /^[ -~]*$/s and $_="$command$_\n\n",next;
-    my $out = $command;
-    if( s/^(?!J<)(.*?)\s*?(?=J<)//s )
-    {
-      $def_in_langs and $out .= "$1\n\n";
-    }
-    for(;;)
-    {
-      my ($l) = /J(<+)/;
-      if( !$l )
-      {
-        $def_in_langs and $out .= "$_\n\n";
-        last;
-      }
-      $l = length($l);
-      if( s/J<{$l}\s*(?:(\w+)\s*;\s*)?(.*?)\s*>{$l}//s )
-      {
-        my($lang,$text) = ($1,$2);
-        defined($lang) or $lang = '';
-        if( grep{$lang eq $_}@{$this->{opt_langs}} )
-        {
-          $text =~ s/J<.*?>//gs;
-          $out .= "$text\n\n";
-        }
-      }else
-      {
-        $def_in_langs and $out .= "$_\n\n";
-        last;
-      }
-    }
-    $_ = $out;
-  }
-  $text = $topspc.join('',@paras);
-  $text =~ s/\n\n+/\n\n/g;
-  print $out $text;
-}
-sub _to_handle
-{
-  my ($this,$file,$mode) = @_;
-  $file ||= '-';
-  if( $file eq '-' )
-  {
-    $_[2] eq 'in' ? \*STDIN : \*STDOUT;
-  }else
-  {
-    my $handle;
-    open($handle,$_[2]eq'in'?'<':'>',$file) or die "could not open file [$file] for $_[2]";
-    $handle;
-  }
-}
-
 
 1;
 __END__

@@ -3,16 +3,16 @@
 # -----------------------------------------------------------------------------
 # Mastering programed by YAMASHINA Hio
 #
-# Copyright 2003 YMIRLINK,Inc.
+# Copyright YAMASHINA Hio
 # -----------------------------------------------------------------------------
-# $Id: MultiLang.pm,v 1.12 2004/08/01 04:02:49 hio Exp $
+# $Id: MultiLang.pm,v 1.13 2004/08/14 09:00:32 hio Exp $
 # -----------------------------------------------------------------------------
 package Pod::MultiLang;
 use strict;
 use warnings;
 
 use vars qw($VERSION);
-$VERSION = '0.07';
+$VERSION = '0.08';
 
 use Pod::Parser;
 use Pod::InputObjects;
@@ -55,40 +55,6 @@ use constant
   LANGS => 'en',
 };
 
-# -----------------------------------------------------------------------------
-# makelinktext
-#  L<> からリンクテキストを作成
-#
-sub makelinktext
-{
-  my ($parser,$lang,$text,$target,$sec) = @_;
-  if( !defined($text) || $text eq '' )
-  {
-    if( $lang eq 'en' )
-    {
-      $text = $target ? !$sec ? $target : "\"$sec\" in $target" : "\"$sec\"";
-    }else
-    {
-      my $dict = 'Pod::MultiLang::Dict';
-      $text = $dict->make_linktext($lang,$target,$sec);
-    }
-  }
-  return $text;
-}
-
-# -----------------------------------------------------------------------------
-# makelink
-#  L<> からリンクを作成
-#
-sub makelink
-{
-  my ($parser,$lang,$text,$target,$sec,$sec_anchor) = @_;
-  
-  $text eq '' and $text = $parser->makelinktext(@_[1..$#_]);
-  $sec_anchor ||= $sec;
-  my $link_to = $target.($sec? qq(/"$sec"):'');
-  "$text ($link_to)";
-}
 
 # -----------------------------------------------------------------------------
 # new
@@ -115,9 +81,13 @@ sub new
   $this;
 }
 
+# =============================================================================
+# Pod::Parser handler.
+# =============================================================================
+
 # -----------------------------------------------------------------------------
 # begin_pod
-#  初期化
+#  initialize pod parsing.
 #
 sub begin_pod
 {
@@ -133,7 +103,7 @@ sub begin_pod
 
 # -----------------------------------------------------------------------------
 # command
-#   コマンド段落の解析
+#   parse command paragraph.
 #
 sub command
 { 
@@ -237,8 +207,8 @@ sub command
 }
 
 # -----------------------------------------------------------------------------
-# vervatim
-#   直述段落の解析
+# verbatim
+#   parse verbatim paragraph.
 #
 sub verbatim
 { 
@@ -254,7 +224,7 @@ sub verbatim
 
 # -----------------------------------------------------------------------------
 # textblock
-#   通常段落の解析
+#   parse normal (text) paragraph.
 #
 sub textblock
 {
@@ -268,6 +238,31 @@ sub textblock
   my $para = [PARA_TEXTBLOCK,$pod_para];
   push(@{$parser->{paras}},$para);
   return;
+}
+
+# =============================================================================
+# UTILITY METHODS
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# $label = $parser->makelinktext($lang,$text,$name,$sec);
+#  make link label.
+#
+sub makelinktext
+{
+  my ($parser,$lang,$text,$name,$sec) = @_;
+  if( !defined($text) || $text eq '' )
+  {
+    if( $lang eq 'en' )
+    {
+      $text = $name ? !$sec ? $name : "\"$sec\" in $name" : "\"$sec\"";
+    }else
+    {
+      my $dict = 'Pod::MultiLang::Dict';
+      $text = $dict->make_linktext($lang,$name,$sec);
+    }
+  }
+  return $text;
 }
 
 1;

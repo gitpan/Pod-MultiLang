@@ -141,6 +141,19 @@ J<< ja;
 JZ<>< en,ja;英語と日本語. >.
 >>
 
+=head1 UTILITY METHODS
+J<< ja; ユーティリティメソッド. >>
+
+=head2 makelinktext
+
+ $label = $parser->makelinktext($lang,$text,$name,$sec);
+
+if $text is specified, returns $text.
+if not, returns by $name and $sec with $lang.
+J<< ja;
+$text が指定されていればそれを, なければ $name と $sec から $lang 用に
+作って返す. 
+>>
 
 =head1 SEE ALSO
 
