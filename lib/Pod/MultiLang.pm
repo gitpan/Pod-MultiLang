@@ -5,14 +5,14 @@
 #
 # Copyright 2003 YMIRLINK,Inc.
 # -----------------------------------------------------------------------------
-# $Id: MultiLang.pm,v 1.8 2003/09/13 05:52:44 hio Exp $
+# $Id: MultiLang.pm,v 1.9 2003/09/13 16:31:24 hio Exp $
 # -----------------------------------------------------------------------------
 package Pod::MultiLang;
 use strict;
 use warnings;
 
 use vars qw($VERSION);
-$VERSION = '0.03';
+$VERSION = '0.04';
 
 use Pod::Parser;
 use Pod::InputObjects;

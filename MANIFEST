@@ -1,6 +1,7 @@
 Changes
 MANIFEST
 Makefile.PL
+README
 bin/mlpod2html
 bin/mlpod2html.mlpod
 bin/mlpod2pod
@@ -13,3 +14,4 @@ lib/Pod/MultiLang/Dict/ja.mlpod
 lib/Pod/MultiLang/Dict/ja.pm
 lib/Pod/MultiLang/Html.mlpod
 lib/Pod/MultiLang/Html.pm
+t/00-use.t

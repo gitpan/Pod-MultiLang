@@ -11,15 +11,19 @@ J<< ja;Pod::MultiLang - 多言語対訳Pod >>
 
 =head1 DESCRIPTION
 
-multi langages in sigle pod.
-one languages enclosed by J interior sequence. 
+Pod::MultiLang is a pod extesion. 
+This implement JZ<><> interior sequence for write multi 
+langages in sigle pod. 
+one languages enclosed by J interior sequence in each paragraph. 
 some heading words are translated automatically. 
-vervatim paragraphs will be joined with one blank line.
+note that JZ<><> is not official interior sequence, 
+this is custom one.
 J<< ja;
-podに対訳を埋め込みます
+pod の装飾符号として, pod 内に複数言語での対訳を記述するために
+JZ<><> を拡張定義します. 
 訳文は JZ<><> という整形符号で囲みます.
 見出しによく使われる単語は自動で訳がつきます.
-連続する直述段落は空行を挟んで１つに連結されます. 
+これは公式な装飾符号ではなく独自に拡張しているものです. 
 >>
 
 new format for LZ<><|/> interior sequence is:,
@@ -37,6 +41,11 @@ restricted into ASCII.
 J<< ja;
 という風に記述します.
 見出し部分にはデフォルトの言語からリンクidが生成されるためです.
+>>
+
+vervatim paragraphs will be joined with one blank line.
+J<< ja;
+連続する直述段落は空行を挟んで１つに連結されます. 
 >>
 
 =head1 EXAMPLE
