@@ -17,7 +17,7 @@ this is simple loose script not using Pod::Parser.
 in arguments, if it starts with '-', there are options.
 after '--', there are file list.
 
-=over *
+=over
 
 =item --outfile="filename"
 
@@ -41,7 +41,7 @@ separated by ','.
 
 =head1 ENVIRONMENT VARIABLES
 
-=over *
+=over
 
 =item MLPOD_LANGS
 

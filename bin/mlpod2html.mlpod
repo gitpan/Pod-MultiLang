@@ -86,7 +86,7 @@ Pod::MultiLang::Html のオプション以外に
 mlpod2html が使うオプションもあります.
 >>
 
-=over *
+=over
 
 =item --outfile
 
@@ -119,7 +119,7 @@ J<< ja;
 利便性から短いオプション名がいくつかあります.
 >>
 
-=over *
+=over
 
 =item -o "filename"
 
@@ -132,7 +132,7 @@ J<< ja;
 
 =head1 ENVIRONMENT VARIABLES
 
-=over *
+=over
 
 =item MLPOD_LANGS
 
@@ -146,7 +146,7 @@ J<< ja;
 
 =head1 TODO
 
-=over *
+=over
 
 =item --conffile="" 
 

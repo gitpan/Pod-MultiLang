@@ -5,14 +5,14 @@
 #
 # Copyright 2003 YMIRLINK,Inc.
 # -----------------------------------------------------------------------------
-# $Id: MultiLang.pm,v 1.11 2003/09/14 13:09:00 hio Exp $
+# $Id: MultiLang.pm,v 1.12 2004/08/01 04:02:49 hio Exp $
 # -----------------------------------------------------------------------------
 package Pod::MultiLang;
 use strict;
 use warnings;
 
 use vars qw($VERSION);
-$VERSION = '0.06';
+$VERSION = '0.07';
 
 use Pod::Parser;
 use Pod::InputObjects;
@@ -141,6 +141,7 @@ sub command
   $paragraph =~ s/^\s+//;
   $paragraph =~ s/\s+$//;
   
+  # skip non-supported begin-end blocks
   # 対象外の begin-end 間はスキップ
   if( defined($parser->{_skipblock}) )
   {

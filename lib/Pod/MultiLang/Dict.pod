@@ -17,7 +17,7 @@ loaded by use statement from load_dict;
 
 =head1 METHODS
 
-=over *
+=over
 
 =item new
 

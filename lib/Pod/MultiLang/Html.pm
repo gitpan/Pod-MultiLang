@@ -5,7 +5,7 @@
 #
 # Copyright 2003 YMIRLINK,Inc.
 # -----------------------------------------------------------------------------
-# $Id: Html.pm,v 1.8 2003/09/13 05:52:44 hio Exp $
+# $Id: Html.pm,v 1.12 2004/08/01 04:02:50 hio Exp $
 # -----------------------------------------------------------------------------
 package Pod::MultiLang::Html;
 use strict;
@@ -186,7 +186,12 @@ sub _map_head_word
   $text =~ s/\s+$//;
   
   my @text = Pod::MultiLang::Dict->find_word($parser->{langs},$text);
-  if( (grep{defined($_)}@text)==1 )
+  my $num_found = grep{defined($_)}@text;
+  if( $num_found==0 )
+  {
+    return $ptree;
+  }
+  if( $num_found==1 )
   {
     my $i = 0;
     foreach(@text)
@@ -200,12 +205,12 @@ sub _map_head_word
     }
   }
   my $i=0;
-  my $result = '';
+  my $result = $text;
   foreach(@text)
   {
     if( defined($_) )
     {
-      $result .= "J<$parser->{langs}[$i];$_>";
+      $result .= "\nJ<$parser->{langs}[$i];$_>";
     }
     ++$i;
   }
@@ -493,7 +498,22 @@ sub buildhtml
       }
     }
   }
-  join("\n",@html)||$list[-1]||'{empty}';
+
+  my $ret = join("\n",@html);
+  if( $ret eq '' )
+  {
+    if( defined($list[-1]) && $list[-1] ne '' )
+    {
+      $ret = $list[-1];
+    }else
+    {
+      foreach (@list,'{empty}')
+      {
+        defined($_) and $ret = $_,last;
+      }
+    }
+  }
+  $ret;
 }
 sub a2s{ join('-',map{defined($_)?"[$_]":'{undef}'}@_) }
 
@@ -822,7 +842,7 @@ sub makelinkanchor
 
 # -----------------------------------------------------------------------------
 # addindex
-#   インデックス項目に追加
+#   adding to index.
 # 
 sub addindex
 {
@@ -869,7 +889,8 @@ sub addindex
 
 # -----------------------------------------------------------------------------
 # end_pod
-#   全部統合.
+#   at end of parsing pod.
+#   build html and output it.
 #
 sub end_pod
 {
@@ -886,7 +907,7 @@ sub end_pod
 
 # -----------------------------------------------------------------------------
 # rebuild
-#   統合の処理.
+#   build infomations needed for html.
 #
 sub rebuild
 {
@@ -903,7 +924,8 @@ sub rebuild
   delete $parser->{_linkwords};
   delete $parser->{_linkwords_keys};
   
-  # head からリンク項目作成.
+  # build indices from "head"s.
+  # 
   foreach (@{$parser->{heads}})
   {
     my ($paraobj) = $$_[PARAINFO_PARAOBJ];
@@ -922,7 +944,8 @@ sub rebuild
     @$_[PARAINFO_CONTENT,PARAINFO_ID,PARAINFO_HEADSIZE] = ($html,$id,$headsize);
   }
   
-  # item からもリンク項目作成.
+  # build indices from "item"s too.
+  # 
   foreach (@{$parser->{items}})
   {
     my ($paraobj,$listtype) = @$_[PARAINFO_PARAOBJ,PARAINFO_LISTTYPE];
@@ -941,20 +964,30 @@ sub rebuild
     $$_[PARAINFO_ID] = $id;
   }
   
-  # タイトルになる部分の探索.
+  # find title block.
+  # 
   my $plain_title;
   my $block_title;
   {
+    # title is next of paragraph "=head<n> NAME"
+    #
     for( my $pos=0; $pos<@{$parser->{paras}}-1; ++$pos )
     {
       my $para = $parser->{paras}[$pos];
-      $para->[PARAINFO_TYPE]==PARA_HEAD && $para->[PARAINFO_ID] eq 'NAME'
+      # TODO: ID が NAME だったり 名前 だったり..
+      $para->[PARAINFO_TYPE]==PARA_HEAD && ($para->[PARAINFO_ID] eq 'NAME' || $para->[PARAINFO_ID] eq 'Xe5X90X8dXe5X89X8d' || $para->[PARAINFO_ID] eq 'X')
 	or next;
       
+      # found "=head<n> NAME"
+      # title is next of it.
+      #
       $para = $parser->{paras}[$pos+1];
       
       ($plain_title,$block_title) = $parser->buildtitle($para->[PARAINFO_PARAOBJ]);
+      last;
     }
+    # if no title..
+    #
     if( !defined($plain_title) )
     {
       $plain_title = 'untitled';
@@ -971,7 +1004,8 @@ sub rebuild
   $parser->{_outhtml_plain_title} = $plain_title;
   $parser->{_outhtml_block_title} = $block_title;
   
-  # リンク語句を登録.
+  # set link words.
+  #
   $parser->{_linkwords} = \%link_keys;
 }
 
@@ -1149,8 +1183,10 @@ sub output_html
     }elsif( @verbpack )
     {
       my $text = join('',@verbpack);
+      $text =~ s/\s*$//;
       if( $text !~ /^\n*$/ )
       {
+        $text =~ s/\n+$/\n/;
 	my $outtext = qq(<pre class="$parser->{_cssprefix}verbatim"><code>$text</code></pre>\n\n);
 	$outtext = $parser->_from_to($outtext);
 	print $out_fh $outtext;

@@ -5,7 +5,7 @@ Pod::MultiLang - multi languages in Pod
 =head1 SYNOPSIS
 
   use Pod::MultiLang::Html;
-  my $parser = Pod::MultiLang::Html->new(%opt);
+  my $parser = Pod::MultiLang::Html->new(langs=>[qw(ja en)]);
   $parser->parse_from_file($infile,$outfile);
 
 =head1 DESCRIPTION
@@ -48,14 +48,16 @@ Verbatim paragraphs will be joined with one blank line.
   
   =cut
 
-sample convertion into pseudo hypertext.
+sample output.
 
- [NAME:名前]
-   en) Example - Example document
-   ja) Example - サンプル
- [SEE ALSO:関連項目]
-   en) "somewhere" in example (linkto:example/somewhere)
-   ja) example 内 "どこか" (linkto:example/somewhere)
+ en:NAME
+ ja:名前
+ en:  Example - Example document
+ ja:  例 - サンプル
+ en:SEE ALSO
+ ja:関連項目
+ en:  "somewhere" in example (linkto:example/somewhere)
+ ja:  example 内 "どこか" (linkto:example/somewhere)
 
 =begin COMMENT
 
@@ -84,7 +86,7 @@ JZ<><<>>の外をデフォルト言語にして処理.
 
 =head1 TODO
 
-Multi lingual verbatim paragraph is not released.
+Multi lingual verbatim paragraph is not supported.
 
 =begin COMMENT
 
@@ -114,5 +116,5 @@ JZ<>< en,ja;for English and Japanese >.
 
 =head1 SEE ALSO
 
-L<Pod::Parser>
+L<Pod::Parser>, L<Pod::MultiLang::Html>
 

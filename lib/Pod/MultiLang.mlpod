@@ -6,7 +6,7 @@ J<< ja;Pod::MultiLang - 多言語対訳Pod >>
 =head1 SYNOPSIS
 
   use Pod::MultiLang::Html;
-  my $parser = Pod::MultiLang::Html->new(%opt);
+  my $parser = Pod::MultiLang::Html->new(langs=>[qw(ja en)]);
   $parser->parse_from_file($infile,$outfile);
 
 =head1 DESCRIPTION
@@ -66,17 +66,16 @@ J<< ja;
   
   =cut
 
-sample convertion into pseudo hypertext.
-J<< ja;
-疑似ハイパーテキストに変換したイメージ.
->>
+sample output.
 
- [NAME:名前]
-   en) Example - Example document
-   ja) Example - サンプル
- [SEE ALSO:関連項目]
-   en) "somewhere" in example (linkto:example/somewhere)
-   ja) example 内 "どこか" (linkto:example/somewhere)
+ en:NAME
+ ja:名前
+ en:  Example - Example document
+ ja:  例 - サンプル
+ en:SEE ALSO
+ ja:関連項目
+ en:  "somewhere" in example (linkto:example/somewhere)
+ ja:  example 内 "どこか" (linkto:example/somewhere)
 
 =begin COMMENT
 
@@ -105,7 +104,7 @@ JZ<><<>>の外をデフォルト言語にして処理.
 
 =head1 TODO
 
-Multi lingual verbatim paragraph is not released.
+Multi lingual verbatim paragraph is not supported.
 J<< ja;
 verbatim 段落の多言語化はまだ仕様化されていません. 
 >>
@@ -145,8 +144,8 @@ JZ<>< en,ja;英語と日本語. >.
 
 =head1 SEE ALSO
 
-L<Pod::Parser>
+L<Pod::Parser>, L<Pod::MultiLang::Html>
 J<< ja;
-L<Pod::Parser>
+L<Pod::Parser>, L<Pod::MultiLang::Html>
 >>
 

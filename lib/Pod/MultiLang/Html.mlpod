@@ -49,11 +49,11 @@ J<< ja;
 new の引数は以下のものがあります. 
 >>
 
-=over *
+=over
 
-=item lang
+=item langs
 
- lang => [qw(ja en)]
+ langs => [qw(ja en)]
 
 inherited from Pod::MultiLang.
 pass to Pod::MultiLang->new(). 

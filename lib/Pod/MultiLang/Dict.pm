@@ -5,7 +5,7 @@
 #
 # Copyright 2003 YMIRLINK,Inc.
 # -----------------------------------------------------------------------------
-# $Id: Dict.pm,v 1.3 2003/09/13 05:52:44 hio Exp $
+# $Id: Dict.pm,v 1.5 2003/10/08 13:55:12 hio Exp $
 # -----------------------------------------------------------------------------
 package Pod::MultiLang::Dict;
 use strict;
@@ -67,12 +67,15 @@ sub find_word
   my $text = uc($origtext);
   my @inparts = split(/\s+(AND|&)\s+/,$text);
   my @text;
+  $#text = $#$langs;
+  my $idx = -1;
+  EACH_LANG:
   foreach my $lang (@$langs)
   {
+    ++$idx;
     my @parts;
     if( @inparts>1 && !exists($STATIC_TABLE{$lang}{AND}) )
     {
-      push(@text,undef);
       next;
     }
     foreach my $text (@inparts)
@@ -110,13 +113,12 @@ sub find_word
         push(@parts,$STATIC_TABLE{$lang}{$chk});
         next;
       }
-      @parts = ();
-      last;
+      next EACH_LANG;
     }
-    push(@text,@parts?join('',@parts):$lang eq 'en'?$origtext:undef);
+    $text[$idx] = join('',@parts);
   }
-  #print "[$text]\n";
-  #map{print "  [$_]\n"}@text;
+  #print "[$text] @{[scalar@text]}\n";
+  #map{print "  $_\n"}map{defined($_)?"[$_]":"{undef}"}@text;
   @text;
 }
 

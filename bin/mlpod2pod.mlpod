@@ -26,7 +26,7 @@ J<< ja;
 -- 以降は - で始まっていてもファイルとして扱われます. 
 >>
 
-=over *
+=over
 
 =item --outfile="filename"
 
@@ -64,7 +64,7 @@ mlpod に記述されている言語のうち, 指定したものだけを
 
 =head1 ENVIRONMENT VARIABLES
 
-=over *
+=over
 
 =item MLPOD_LANGS
 
