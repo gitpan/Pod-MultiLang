@@ -1,0 +1,15 @@
+Changes
+MANIFEST
+Makefile.PL
+bin/mlpod2html
+bin/mlpod2html.mlpod
+bin/mlpod2pod
+bin/mlpod2pod.mlpod
+lib/Pod/MultiLang.mlpod
+lib/Pod/MultiLang.pm
+lib/Pod/MultiLang/Dict.mlpod
+lib/Pod/MultiLang/Dict.pm
+lib/Pod/MultiLang/Dict/ja.mlpod
+lib/Pod/MultiLang/Dict/ja.pm
+lib/Pod/MultiLang/Html.mlpod
+lib/Pod/MultiLang/Html.pm

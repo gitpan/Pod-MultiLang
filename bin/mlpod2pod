@@ -1,0 +1,208 @@
+#!/usr/local/ymir/perl/bin/perl -w
+## ----------------------------------------------------------------------------
+#  mlpod2pod
+#    多言語Podを通常podに変換
+# -----------------------------------------------------------------------------
+# Mastering programed by YAMASHINA Hio
+#
+# Copyright 2003 YMIRLINK,Inc.
+# -----------------------------------------------------------------------------
+# $Id: mlpod2pod,v 1.2 2003/09/13 08:35:38 hio Exp $
+# -----------------------------------------------------------------------------
+package Mlpod2pod;
+use strict;
+
+use Encode;
+BEGIN
+{
+  if( 0 )
+  {
+    # for debug
+    eval
+    {
+      ($SIG{__DIE__})='DEFAULT';
+      require Diehook;
+    };
+    if( !$@ )
+    {
+      Diehook->addhook();
+      #Diehook->addwarnhook();
+    }
+  }
+}
+
+my @arraykeys = qw( langs );
+my @paramkeys = qw( default-lang auto-out );
+
+# -----------------------------------------------------------------------------
+# mlpod2pod 起動.
+#
+if( !caller() )
+{
+  __PACKAGE__->do_work(@ARGV);
+}
+
+# -----------------------------------------------------------------------------
+# 処理
+#
+sub do_work
+{
+  my $pkg = shift;
+  my %opt;
+  my @files;
+  while(@_)
+  {
+    $_ = shift;
+    if( $_ eq '--' )
+    {
+      push(@files,@_);
+      last;
+    }
+    if( $_ eq '-o' )
+    {
+      my $v = shift;
+      $opt{outfile} = ($v=~/(.*)/)[0];
+    }elsif( /^--([\w-]+)(=?)(.*)$/ )
+    {
+      my ($k,$set,$v) = ($1,$2,$3);
+      if( !$set )
+      {
+	$v = 1;
+      }
+      if( grep{$_ eq $k}@arraykeys )
+      {
+	$v = [split(/[:,]/,$v)];
+      }elsif( grep{$_ eq $k}@paramkeys )
+      {
+      }else
+      {
+	warn "unknown key [$k]\n";
+      }
+      $k =~ tr/-/_/;
+      $opt{$k} = $v;
+    }elsif( /^-/ )
+    {
+      warn "ignore option [$_[0]]\n";
+    }else
+    {
+      push(@files,$_);
+    }
+  }
+  if( !$opt{langs} && $ENV{MLPOD_LANGS} )
+  {
+    $opt{langs} = [split(/[:,]/,$ENV{MLPOD_LANGS})];
+  }
+  
+  ## Create a parser object and have it parse file whose name was
+  ## given on the command-line (use STDIN if no files were given).
+  my $parser = new Pod::MultiLang::Pod(%opt);
+  
+  if( @files==0 )
+  {
+    $parser->parse_from_file('-',$opt{outfile}||'-');
+  }else
+  {
+    foreach (@files)
+    {
+      -d $_ and die "[$_] is directory.";
+      my $outfile = $opt{outfile};
+      if( $outfile )
+      {
+        $parser->parse_from_file($_,$outfile);
+      }elsif( $opt{auto_out} )
+      {
+	($outfile = $_)=~s/\.(pl|pm|mlpod)$/.pod/ or $outfile = $_.'.pod';
+        $parser->parse_from_file($_,$outfile);
+      }else
+      {
+	$parser->parse_from_file($_);
+      }
+    } # foreach
+  }
+}
+
+# -----------------------------------------------------------------------------
+# 仮の mlpod2pod
+#
+package Pod::MultiLang::Pod;
+sub new
+{
+  my $pkg = shift;
+  my %opt = @_;
+  my $this = bless{},$pkg;
+  
+  $this->{opt_langs} = $opt{langs} || [qw(en)];
+  $this->{opt_default_lang} = $opt{default_lang} || 'en';
+  $this;
+}
+sub parse_from_file
+{
+  my ($this,$infile,$outfile) = @_;
+  my $in  = $this->_to_handle($infile,'in');
+  my $out = $this->_to_handle($outfile,'out');
+  local($/);
+  my $text = <$in>;
+  my $topspc = $text =~ s/^(\n+)//s ? $1 : '';
+  my @paras = split(/\n\n+/,$text);
+  my $def_in_langs = grep{$_  eq $this->{opt_default_lang}}@{$this->{opt_langs}};
+  foreach(@paras)
+  {
+    /^\n/s and next;
+    my $command = s/^(=\w+\s+)//s ? $1 : '';
+    /^[ -~]*$/s and $_="$command$_\n\n",next;
+    my $out = $command;
+    if( s/^(?!J<)(.*?)\s*?(?=J<)//s )
+    {
+      $def_in_langs and $out .= "$1\n\n";
+    }
+    for(;;)
+    {
+      my ($l) = /J(<+)/;
+      if( !$l )
+      {
+        $def_in_langs and $out .= "$_\n\n";
+        last;
+      }
+      $l = length($l);
+      if( s/J<{$l}\s*(?:(\w+)\s*;\s*)?(.*?)\s*>{$l}//s )
+      {
+        my($lang,$text) = ($1,$2);
+        defined($lang) or $lang = '';
+        if( grep{$lang eq $_}@{$this->{opt_langs}} )
+        {
+          $text =~ s/J<.*?>//gs;
+          $out .= "$text\n\n";
+        }
+      }else
+      {
+        $def_in_langs and $out .= "$_\n\n";
+        last;
+      }
+    }
+    $_ = $out;
+  }
+  $text = $topspc.join('',@paras);
+  $text =~ s/\n\n+/\n\n/g;
+  print $out $text;
+}
+sub _to_handle
+{
+  my ($this,$file,$mode) = @_;
+  $file ||= '-';
+  if( $file eq '-' )
+  {
+    $_[2] eq 'in' ? \*STDIN : \*STDOUT;
+  }else
+  {
+    my $handle;
+    open($handle,$_[2]eq'in'?'<':'>',$file) or die "could not open file [$file] for $_[2]";
+    $handle;
+  }
+}
+
+
+1;
+__END__
+# -----------------------------------------------------------------------------
+# End Of File.
+# -----------------------------------------------------------------------------

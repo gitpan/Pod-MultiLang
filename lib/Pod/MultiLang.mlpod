@@ -1,0 +1,122 @@
+=head1 NAME
+
+Pod::MultiLang - multi languages in Pod
+J<< ja;Pod::MultiLang - 多言語対訳Pod >>
+
+=head1 SYNOPSIS
+
+  use Pod::MultiLang::Html;
+  my $parser = Pod::MultiLang::Html->new(%opt);
+  $parser->parse_from_file($infile,$outfile);
+
+=head1 DESCRIPTION
+
+multi langages in sigle pod.
+one languages enclosed by J interior sequence. 
+some heading words are translated automatically. 
+vervatim paragraphs will be joined with one blank line.
+J<< ja;
+podに対訳を埋め込みます
+訳文は JZ<><> という整形符号で囲みます.
+見出しによく使われる単語は自動で訳がつきます.
+連続する直述段落は空行を挟んで１つに連結されます. 
+>>
+
+new format for LZ<><|/> interior sequence is:,
+J<< ja;
+LZ<><|/> には,
+>>
+
+ J<<<
+ L<< text | page /"heading J<ja; japanese heading >" >>
+ >>>
+
+at section part, english heading is still required.
+because in many hypertext formats, link identifier is 
+restricted into ASCII.
+J<< ja;
+という風に記述します.
+見出し部分にはデフォルトの言語からリンクidが生成されるためです.
+>>
+
+=head1 EXAMPLE
+
+  =head1 NAME
+  
+  Example - Example document.
+  J<< ja;Example - サンプル >>
+
+  =cut
+
+=begin COMMENT
+
+JZ<><<>>の外をデフォルト言語にして処理.
+
+  content
+  J<< xx;content-in-xx >>
+
+とあったときに,
+
+  J<< (default-lang);content >>
+  J<< xx;content-in-xx >>
+
+で処理.
+でも,
+
+  content
+
+だけなら, 言語指定なしでそのまま
+
+  content
+
+で出力.
+
+=end COMMENT
+
+=head1 TODO
+
+multi langual verbatim paragraph is not released.
+J<< ja;
+verbatim 段落の多言語化はまだ仕様化されていません. 
+>>
+
+=begin COMMENT
+
+ default text.
+ 
+ =begin :block
+ 
+ =for mlpodopt lang ja
+ 
+  japanese vervatim block.
+
+ =for mlpodopt lang fr
+ 
+  un bloc vervatim en francais
+
+ =end :block
+
+=end COMMENT
+
+=begin COMMENT
+
+JZ<>< *;for all langs, e.g. COPYRIGHT text >.
+J<< ja;
+JZ<>< *;どの言語でも共通. COPYTIGHT 表記とか. >
+>>
+
+=end COMMENT
+
+JZ<>< en,ja;for English and Japanese >.
+J<< ja;
+JZ<>< en,ja;英語と日本語. >.
+>>
+
+
+=head1 SEE ALSO
+
+L<Pod::Parser>
+J<< ja;
+L<Pod::Parser>
+>>
+
