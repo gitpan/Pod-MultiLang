@@ -1,5 +1,10 @@
 (ja.utf-8)
 
+ v0.06 (2003/09/14)
+       mlpod2pod
+         o [ja] verbatim 内も J<> を消しちゃってたのを修正
+           [en] fix removing J<> inside verbatim paragraph
+ 
  v0.05 (2003/09/14)
        [ja] .pod ファイルもパッケージに追加
        [en] add .pod files into package
@@ -41,4 +46,4 @@
        [ja] 初版
        [en] initial version
 
-$Id: Changes,v 1.9 2003/09/14 07:11:31 hio Exp $
+$Id: Changes,v 1.11 2003/09/14 13:09:00 hio Exp $

@@ -11,35 +11,44 @@ Pod::MultiLang - multi languages in Pod
 =head1 DESCRIPTION
 
 Pod::MultiLang is a pod extesion. 
-This implement JZ<><> interior sequence for write multi 
+This module implements JZ<><> interior sequence for write multi 
 langages in sigle pod. 
-one languages enclosed by J interior sequence in each paragraph. 
-some heading words are translated automatically. 
-note that JZ<><> is not official interior sequence, 
+One languages enclosed by J interior sequence in each paragraph. 
+Some heading words are translated automatically. 
+Note that JZ<><> is not official interior sequence, 
 this is custom one.
 
-new format for LZ<><|/> interior sequence is:,
+New format for LZ<><|/> interior sequence is:
 
-at section part, english heading is still required.
-because in many hypertext formats, link identifier is 
+ J<<< ja;
+ L<< text | page /"heading J<ja; japanese heading >" >>
+ >>>
+
+At section part, English heading is still required.
+Because in many hypertext formats, link identifier is 
 restricted into ASCII.
 
-vervatim paragraphs will be joined with one blank line.
+Verbatim paragraphs will be joined with one blank line.
 
 =head1 EXAMPLE
+
+(with ja.utf8)
 
   =head1 NAME
   
   Example - Example document
+  J<< ja;Example - サンプル >>
 
   =head1 SEE ALSO
   
   L<example/somewhere>
-
+  J<<< ja;
+  L<< example/somewhere J<ja;どこか> >>
+  >>>
   
   =cut
 
-sample convertion into psedo hypertext.
+sample convertion into pseudo hypertext.
 
  [NAME:名前]
    en) Example - Example document
@@ -53,10 +62,12 @@ sample convertion into psedo hypertext.
 JZ<><<>>の外をデフォルト言語にして処理.
 
   content
+  J<< xx;content-in-xx >>
 
 とあったときに,
 
-  
+  J<< (default-lang);content >>
+  J<< xx;content-in-xx >>
 
 で処理.
 でも,
@@ -73,7 +84,7 @@ JZ<><<>>の外をデフォルト言語にして処理.
 
 =head1 TODO
 
-multi langual verbatim paragraph is not released.
+Multi lingual verbatim paragraph is not released.
 
 =begin COMMENT
 
