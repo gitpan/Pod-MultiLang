@@ -5,7 +5,7 @@
 #
 # Copyright 2003 YMIRLINK,Inc.
 # -----------------------------------------------------------------------------
-# $Id: Dict.pm,v 1.5 2003/10/08 13:55:12 hio Exp $
+# $Id: /perl/Pod-MultiLang/lib/Pod/MultiLang/Dict.pm 111 2006-07-07T15:46:35.730716Z hio  $
 # -----------------------------------------------------------------------------
 package Pod::MultiLang::Dict;
 use strict;

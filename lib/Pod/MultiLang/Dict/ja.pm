@@ -5,7 +5,7 @@
 #
 # Copyright 2003 YMIRLINK,Inc.
 # -----------------------------------------------------------------------------
-# $Id: ja.pm,v 1.4 2003/09/13 05:52:44 hio Exp $
+# $Id: /perl/Pod-MultiLang/lib/Pod/MultiLang/Dict/ja.pm 117 2006-07-09T16:00:40.726552Z hio  $
 # -----------------------------------------------------------------------------
 package Pod::MultiLang::Dict::ja;
 use strict;
@@ -31,8 +31,8 @@ sub static_table
    'COPYRIGHT'    => '著作権',
    'INDEX'        => '索引',
    
-   'ACKNOWLEDGEMENTS' => '謝辞',
    'ABSTRACT'     => '要約',
+   'ACKNOWLEDGEMENTS' => '謝辞',
    'AND'          => '及び',
    'APPENDIX'     => '付録',
    'ARGUMENTS'    => '引数',
@@ -40,28 +40,29 @@ sub static_table
    'CAVEATS'      => '警告',
    'CHANGES'      => '変更点',
    'COPYRIGHT'    => '著作権',
-   'ENVIRONMENT'  => '環境',
    'ENVIRONMENT VARIABLES'  => '環境変数',
+   'ENVIRONMENT'  => '環境',
    'EVENTS'       => 'イベント',
    'EXAMPLE'      => '例',
    'EXPORTS'      => 'エクスポート',
    'FEATURES'     => '機能',
    'FILES'        => 'ファイル',
    'FUNCTIONS'    => '関数',
+   'HISTORY'      => '履歴',
    'INSTALL'      => 'インストール',
    'INSTALLATION' => 'インストール',
-   'HISTORY'      => '履歴',
    'LICENSE'      => 'ライセンス',
    'LIMITATION'   => '制限',
-   'NOTES'        => '留意事項',
    'METHODS'      => 'メソッド',
-   'REQUIRES'     => '依存',
-   'REQUIREMENTS' => '依存',
-   'SUMMARY'      => '要約',
-   'TODO'         => '今後の予定',
-   'TO DO'        => '今後の予定',
+   'NOTES'        => '留意事項',
    'OPTIONS'      => 'オプション',
+   'REQUIREMENTS' => '依存',
+   'REQUIRES'     => '依存',
+   'SUMMARY'      => '要約',
+   'SUPPORT'      => 'サポート',
    'SYNTAX'       => '構文',
+   'TO DO'        => '今後の予定',
+   'TODO'         => '今後の予定',
    'USAGE'        => '使用方法',
    'VERSION'      => 'バージョン',
    'WARNING'      => '警告',

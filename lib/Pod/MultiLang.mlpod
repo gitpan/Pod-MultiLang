@@ -1,7 +1,13 @@
+=encoding utf-8
+
 =head1 NAME
 
 Pod::MultiLang - multi languages in Pod
-J<< ja;Pod::MultiLang - 多言語対訳Pod >>
+J<< ja;Pod::MultiLang_ja - 多言語対訳Pod >>
+
+=head1 VERSION
+
+Versoin 0.09
 
 =head1 SYNOPSIS
 
@@ -155,6 +161,93 @@ $text が指定されていればそれを, なければ $name と $sec から $
 作って返す. 
 >>
 
+=head2 parseLang
+
+ ($lang,$text) = $parser->parseLang($data);
+ 
+  $parser->parseLang("ja; text"); ==> ('ja', 'text')
+
+=head1 METHODS
+
+=head2 new
+
+create new instance.
+
+=head1 OVERRIDES
+
+This module implements L<Pod::Parser>.
+
+=over 4
+
+=item begin_pod
+
+=item end_pod
+
+=item command
+
+=item textblock
+
+=item verbatim
+
+=back
+
+=head1 AUTHOR
+
+YAMASHINA Hio, C<< <hio at cpan.org> >>
+J<<< ja;
+山科 氷魚 (YAMASHINA Hio), C<< <hio at cpan.org> >>
+>>>
+
+=head1 BUGS
+
+Please report any bugs or feature requests to
+C<bug-pod-multilang at rt.cpan.org>, or through the web interface at
+L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Pod-MultiLang>.
+I will be notified, and then you'll automatically be notified of progress on
+your bug as I make changes.
+J<< ja;
+バグや要望は C<bug-pod-multilangt.cpan.org> 宛に
+報告してください. 若しくは
+L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Pod-MultiLang>.
+にある web インターフェースからでもかまいません. 
+そこから私に通知され, そして私が変更を行うことで報告頂いたバグの進捗を
+自動的にあなたに伝えるでしょう. 
+>>
+
+=head1 SUPPORT
+
+You can find documentation for this module with the perldoc command.
+J<< ja;
+このモジュールのドキュメントは perldoc コマンドで見ることが出来ます. 
+>>
+
+    perldoc Pod::MultiLang
+
+You can also look for information at:
+J<< ja;
+また, 以下の場所でも見ることが出来ます: 
+>>
+
+=over 4
+
+=item * AnnoCPAN: Annotated CPAN documentation
+
+L<http://annocpan.org/dist/Pod-MultiLang>
+
+=item * CPAN Ratings
+
+L<http://cpanratings.perl.org/d/Pod-MultiLang>
+
+=item * RT: CPAN's request tracker
+
+L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Pod-MultiLang>
+
+=item * Search CPAN
+
+L<http://search.cpan.org/dist/Pod-MultiLang>
+
+=back
+
 =head1 SEE ALSO
 
 L<Pod::Parser>, L<Pod::MultiLang::Html>
@@ -162,3 +255,19 @@ J<< ja;
 L<Pod::Parser>, L<Pod::MultiLang::Html>
 >>
 
+=head1 COPYRIGHT & LICENSE
+J<< ja; 著作権及びライセンス >>
+
+Copyright 2006 YAMASHINA Hio, all rights reserved.
+
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+J<< ja;
+このプログラムはフリーソフトウェアです. あなたは Perl と同じライセンスの
+元で再配布及び変更を行うことが出来ます. 
+原文:
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+>>
+
+=cut

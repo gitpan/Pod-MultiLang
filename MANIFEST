@@ -2,12 +2,15 @@ Changes
 MANIFEST
 Makefile.PL
 README
+SIGNATURE
 bin/mlpod2html
 bin/mlpod2html.mlpod
 bin/mlpod2html.pod
+bin/mlpod2html_ja.pod
 bin/mlpod2pod
 bin/mlpod2pod.mlpod
 bin/mlpod2pod.pod
+bin/mlpod2pod_ja.pod
 lib/Pod/MultiLang.mlpod
 lib/Pod/MultiLang.pm
 lib/Pod/MultiLang.pod
@@ -17,11 +20,19 @@ lib/Pod/MultiLang/Dict.pod
 lib/Pod/MultiLang/Dict/ja.mlpod
 lib/Pod/MultiLang/Dict/ja.pm
 lib/Pod/MultiLang/Dict/ja.pod
+lib/Pod/MultiLang/Dict/ja_ja.pod
+lib/Pod/MultiLang/Dict_ja.pod
 lib/Pod/MultiLang/Html.mlpod
 lib/Pod/MultiLang/Html.pm
 lib/Pod/MultiLang/Html.pod
+lib/Pod/MultiLang/Html_ja.pod
 lib/Pod/MultiLang/Pod.mlpod
 lib/Pod/MultiLang/Pod.pm
 lib/Pod/MultiLang/Pod.pod
+lib/Pod/MultiLang/Pod_ja.pod
+lib/Pod/MultiLang_ja.pod
 t/00-use.t
 t/01-test.t
+t/pod-coverage.t
+t/pod.t
+META.yml                                 Module meta-data (added by MakeMaker)

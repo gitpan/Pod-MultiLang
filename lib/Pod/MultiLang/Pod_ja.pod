@@ -1,32 +1,25 @@
 =encoding utf-8
 
-=head1 NAME
+=head1 名前
 
 Pod::MultiLang::Pod - turn MultiLang-pod into just pod
-J<< Pod::MultiLang::Pod_ja - ja;多言語 Pod を通常の pod に変換 >>
 
-=head1 SYNOPSIS
+
+
+=head1 概要
 
  $parser = Pod::MultiLang::Pod->new(%opts);
  $parser->parse_from_file($infile,$outfile);
 
-=head1 DESCRIPTION
+=head1 説明
 
-Pod::MultiLang::Pod translates pod into normal pod.
-This inherits L<Pod::MultiLang> and it inherits L<Pod::Parser>, 
-usage is same as Pod::Parser.
-J<< ja;
 L<Pod::MultiLang> を継承する pod へのトランスレータです. 
 Pod::MultiLang は L<Pod::Parser> を基底としているので, 
-基本的な使用方法はそれにならいます. 
->>
+基本的な使用方法はそれにならいます.
 
-=head1 OPTIONS
+=head1 オプション
 
-method new takes follow arguments:
-J<< ja;
-new の引数は以下のものがあります. 
->>
+new の引数は以下のものがあります.
 
 =over
 
@@ -34,65 +27,43 @@ new の引数は以下のものがあります.
 
  langs => [qw(ja en)]
 
-inherited from Pod::MultiLang.
-pass to Pod::MultiLang->new(). 
-see L<Pod::MultiLang/new>.
-J<< ja;
 Pod::MultiLang から引き継いでいるオプション. 
 Pod::MultiLang->new() に渡されます. 
 L<Pod::MultiLang/new> を参照してください.
->>
 
-specify using languals. 
-not specifieds are ignore if it exists in mlpod document.
-J<< ja;
 使用する言語を指定します. 
-指定されなかった言語は, mlpod 中にあっても無視されます. 
->>
+指定されなかった言語は, mlpod 中にあっても無視されます.
 
 =item in_charset
 
-encoding for input document.
-default is utf-8. 
-J<< ja;
 入力ファイルのエンコーディングを指定します.
 デフォルトでは utf-8 です.
->>
 
 =item out_charset
 
-encoding for output document.
-default is utf-8.
-J<< ja;
 出力ファイルのエンコーディングを指定します.
 デフォルトでは utf-8 です.
->>
 
-and embed as 
-Z<><meta content="Content-Type" value="text/html; charset=" /> .
-J<< ja;
 Z<><meta content="Content-Type" value="text/html; charset=" /> 
 にも埋め込まれます.
->>
 
 =item default_lang
 
-language for outsize of JZ<><> interior sequence.
-J<< ja;
 JZ<><> で囲まれていない文章に対する言語を指定します.
->>
 
 =back
 
-=head1 METHODS
+=head1 メソッド
 
 =head2 new
 
 create new instance.
 
+
 =head1 OVERRIDES
 
 This module implements L<Pod::Parser>.
+
 
 =over 4
 
@@ -124,6 +95,7 @@ This module implements L<Pod::Parser>.
 
 =back
 
-=head1 SEE ALSO
+=head1 関連項目
 
 L<Pod::MultiLang>
+

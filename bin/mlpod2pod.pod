@@ -1,3 +1,5 @@
+=encoding utf-8
+
 =head1 NAME
 
 mlpod2pod - MultiLang-pod into just a normal pod

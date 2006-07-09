@@ -5,14 +5,14 @@
 #
 # Copyright YAMASHINA Hio
 # -----------------------------------------------------------------------------
-# $Id: MultiLang.pm,v 1.13 2004/08/14 09:00:32 hio Exp $
+# $Id: /perl/Pod-MultiLang/lib/Pod/MultiLang.pm 119 2006-07-09T16:05:04.291809Z hio  $
 # -----------------------------------------------------------------------------
 package Pod::MultiLang;
 use strict;
 use warnings;
 
 use vars qw($VERSION);
-$VERSION = '0.08';
+$VERSION = '0.09';
 
 use Pod::Parser;
 use Pod::InputObjects;
@@ -30,6 +30,7 @@ use constant
   PARA_BEGIN     => 7,
   PARA_END       => 8,
   PARA_FOR       => 9,
+  PARA_ENCODING  => 10,
 };
 use constant
 {
@@ -99,6 +100,10 @@ sub begin_pod
   
   $parser->{_neststack} = [];
   $parser->{_skipblock} = undef;
+}
+
+sub end_pod
+{
 }
 
 # -----------------------------------------------------------------------------
@@ -200,6 +205,11 @@ sub command
     my $para = [PARA_FOR,$pod_para];
     $para->[PARAINFO_CONTENT] = $paragraph;
     push(@{$parser->{paras}},$para);
+  }elsif( $command eq 'encoding' )
+  {
+    my $para = [PARA_ENCODING,$pod_para];
+    $para->[PARAINFO_CONTENT] = $paragraph;
+    push(@{$parser->{paras}},$para);
   }else
   {
     warn "unknown command [$command] [$paragraph]";
@@ -263,6 +273,18 @@ sub makelinktext
     }
   }
   return $text;
+}
+
+# -----------------------------------------------------------------------------
+# ($lang,$text) = $parser->parseLang($text);
+#   J<> の中身を解析.
+#
+sub parseLang
+{
+  my $text = $_[1];
+  defined($text) or return ('','');
+  my $lang = $text =~ s,^\s*(\w+)\s*[/;]\s*,, ? $1 : '';
+  ($lang,$text);
 }
 
 1;

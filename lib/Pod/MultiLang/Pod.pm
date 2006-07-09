@@ -5,7 +5,7 @@
 #
 # Copyright 2003 YMIRLINK,Inc.
 # -----------------------------------------------------------------------------
-# $Id: Pod.pm,v 1.2 2004/08/14 11:24:38 hio Exp $
+# $Id: /perl/Pod-MultiLang/lib/Pod/MultiLang/Pod.pm 116 2006-07-09T15:52:31.021201Z hio  $
 # -----------------------------------------------------------------------------
 package Pod::MultiLang::Pod;
 use strict;
@@ -32,6 +32,7 @@ use constant
   PARA_BEGIN     => 7,
   PARA_END       => 8,
   PARA_FOR       => 9,
+  PARA_ENCODING  => 10,
 };
 use constant
 {
@@ -173,8 +174,8 @@ sub new
 #
 sub begin_pod
 {
-  my ($parser) = @_;
-  &Pod::MultiLang::begin_pod;
+  my $parser = shift;
+  $parser->SUPER::begin_pod(@_);
   
   $parser->{_verbose} = VERBOSE_DEFAULT;
   $parser->{_verbout} = \*STDERR;
@@ -284,7 +285,7 @@ sub buildtext
   }
   $ret;
 }
-sub a2s{ join('-',map{defined($_)?"[$_]":'{undef}'}@_) }
+sub _a2s{ join('-',map{defined($_)?"[$_]":'{undef}'}@_) }
 
 # -----------------------------------------------------------------------------
 # $idx = $parser->_find_lang_index($lang);
@@ -349,7 +350,7 @@ sub parse_mlpod
     $ptree = $ptree->parse_tree();
   }
   my @children = can($ptree,'children')?$ptree->children():isa($ptree,'ARRAY')?@$ptree:die "unknown object : $ptree";
-  #print STDERR "in: @{[scalar@children]} ",a2s(@children),"\n";
+  #print STDERR "in: @{[scalar@children]} ",_a2s(@children),"\n";
   foreach (@children)
   {
     if( !ref($_) )
@@ -367,7 +368,7 @@ sub parse_mlpod
       # iseq の中身を mlpod 分解. 
       #
       my @child = $parser->parse_mlpod($_->parse_tree());
-      #print STDERR"  child : $#child ".a2s(@child)."\n";
+      #print STDERR"  child : $#child "._a2s(@child)."\n";
       
       # default_lang が未定義だったら, 言語指定なし部分を充てる.
       #
@@ -476,11 +477,11 @@ sub parse_mlpod
         $ret[$i] .= $child[-1];
         last;
       }
-      #print STDERR "  iseq: $#ret ",a2s(@ret),"\n";
+      #print STDERR "  iseq: $#ret ",_a2s(@ret),"\n";
     }
   }
   $ret[-1]=~/\S/ or $ret[-1]='';
-  #print "out: @{[scalar@ret]} ",a2s(@ret),"\n";
+  #print "out: @{[scalar@ret]} ",_a2s(@ret),"\n";
   @ret;
 }
 
@@ -491,7 +492,9 @@ sub parse_mlpod
 #
 sub end_pod
 {
-  my ($parser, $command, $paragraph, $line_num) = @_;
+  my $parser = shift;
+  my ($command, $paragraph, $line_num) = @_;
+	$parser->SUPER::end_pod(@_);
   
   if( !@{$parser->{paras}} )
   {
@@ -499,7 +502,7 @@ sub end_pod
   }
   
   $parser->rebuild();
-  $parser->output_html();
+  $parser->output_pod();
 }
 
 # -----------------------------------------------------------------------------
@@ -577,10 +580,10 @@ sub _from_to
 }
 
 # -----------------------------------------------------------------------------
-# output_html
-#   htmlを出力
+# output_pod
+#   podを出力
 #
-sub output_html
+sub output_pod
 {
   my ($parser, $command, $paragraph, $line_num) = @_;
   
@@ -740,6 +743,13 @@ sub output_html
       $outtext .= "<!-- end [$mode] behavior [$fin->[STK_BEHAVIOR]] (started by [$fin->[STK_PARAOBJ][PARAINFO_CONTENT]]) -->\n";
     }elsif( $paratype==PARA_FOR )
     {
+    }elsif( $paratype==PARA_ENCODING )
+    {
+      my $text = $_->[PARAINFO_CONTENT];
+      my $cmd = $paraobj->cmd_name();
+      $text = $parser->_from_to($text);
+      $text =~ s/\n(\s*\n)+/\n/g;
+      $outtext = "=$cmd $text\n\n";
     }else
     {
       $parser->verbmsg(VERBOSE_ERROR,"what\'s got?? [$paratype]");

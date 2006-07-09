@@ -1,7 +1,8 @@
+=encoding utf-8
+
 =head1 NAME
 
-Pod::MultiLang::Pod - turn MultiLang-pod into just pod
-
+Pod::MultiLang::Pod_ja - ja;多言語 Pod を通常の pod に変換
 
 =head1 SYNOPSIS
 
@@ -55,6 +56,48 @@ Z<><meta content="Content-Type" value="text/html; charset=" /> .
 
 language for outsize of JZ<><> interior sequence.
 
+
+=back
+
+=head1 METHODS
+
+=head2 new
+
+create new instance.
+
+
+=head1 OVERRIDES
+
+This module implements L<Pod::Parser>.
+
+
+=over 4
+
+=item begin_pod
+
+=item end_pod
+
+=item interior_sequence
+
+=back
+
+=head1 PRIVATE FUNCTIONS
+
+=over 4
+
+=item rebuild
+
+=item buildtext
+
+=item output_pod
+
+=item on_mlpod_link
+
+=item on_mlpod_plain
+
+=item verbmsg
+
+=item parse_mlpod
 
 =back
 

@@ -11,6 +11,9 @@ my @MLPODFILES = qw( bin/mlpod2html.mlpod
                      lib/Pod/MultiLang/Pod.mlpod
                     );
 
+my $pod_refresh = q{find lib -name '*.mlpod' | while read f; do d=`dirname $f`/`basename $f .mlpod`; perl -Ilib bin/mlpod2pod --langs=ja $d.mlpod >  "${d}_ja.pod"; done};
+$pod_refresh =~ s/\$/\$\$/g;
+
 my %ATTR = 
 (
   NAME         => 'Pod::MultiLang',
@@ -19,6 +22,7 @@ my %ATTR =
   depend       => {
                    '.SUFFIXES' => '.mlpod .pod',
                    '.mlpod.pod' => ';$(PERLRUNINST) bin/mlpod2pod $< > $@',
+                   'pod-refresh' => ";$pod_refresh",
                   },
 );
 mlpodconvertion(\%ATTR,@MLPODFILES);
@@ -35,32 +39,55 @@ sub mlpodconvertion
   foreach(@MLPODFILES)
   {
     # *.mlpod           (src)
-    # => *.pod          (tmp in srcdir, used for make dist)
+    # => *.pod          (auto gen)
     #  => $(INST)*.pod  (blib)
     #   => $(INST)*.man (blib)
+    
     my $mlpod = $_;
-    my $pod;
-    ($pod=$mlpod) =~ s/\.mlpod$/.pod/ or $pod .= '.pod';
+    (my $mlpod_basename = $mlpod) =~ s/\.mlpod$//;
     
-    my $dir = s,^([a-z]+)/,, ? $1 : '';
-    my ($page,$mandir) = $dir eq 'bin' ? (1=>'MAN1PODS') :
-                         $dir eq 'lib' ? (3=>'MAN3PODS') :
-                         die "unknown sub [$dir]";
+    # man section.
+    my ($mannum, $pod2man, $mansect)
+      = /^bin\// ? (1, 'MAN1PODS', '1')
+      : /^lib\// ? (3, 'MAN3PODS', '3pm')
+      :            die "category unknown [$_]"
+      ;
     
-    (my $instpod = $_)=~s/\.mlpod$/.pod/;
-    $instpod = ( $page==1 ? '$(INST_SCRIPT)/' :
-             $page==3 ? '$(INST_LIB)/' :
-             die "unknwon page [$page]"
-           ) . $instpod;
+    # man name.
+    # bin/mlpod2pod.mlpod     => mlpod2pod
+    # lib/Pod/MultiLang.mlpod => Pod::MultiLang
+    my $manname = $_;
+    $manname =~ s/^(bin|lib)\///;
+    $manname =~ s/\.\w+$//;
+    $manname =~ s/\//::/g;
     
-    s/\.\w+$//;
-    s/\//::/g;
-    my $man = "\$(INST_MAN${page}DIR)/$_.$page";
+    my $instpod_base = $mlpod_basename;
+    $instpod_base =~ s/bin/\$(INST_SCRIPT)/;
+    $instpod_base =~ s/lib/\$(INST_LIB)/;
     
-    $ATTR->{depend}{$pod} = $mlpod;
-    $ATTR->{depend}{$instpod} = "$pod; $CP \$< \$\@";
-    $ATTR->{$mandir}{$instpod} = $man;
-    push(@clean_FILES,$pod);
+    my $ja_builder = '$(PERLRUNINST) bin/mlpod2pod --langs=ja $< > $@';
+    my $builder = { _ja => "; $ja_builder", };
+    foreach my $lang ('', '_ja')
+    {
+      # lib/*.mlpod ==> lib/*.pod
+      my $pod = $mlpod_basename . $lang . '.pod';
+      my $bld = $builder->{$lang} || '';
+      $ATTR->{depend}{$pod} = $mlpod . $bld;
+      
+      # {bin/lib}/*.pod ==> blib/{script/lib}/*.pod
+      my $instpod = $instpod_base . $lang . '.pod';
+      $ATTR->{depend}{$instpod} = "$pod; $CP \$< \$\@";
+      
+      # blib/*.pod ==> blib/man*
+      my $man = "\$(INST_MAN${mannum}DIR)/${manname}$lang.${mansect}";
+      $ATTR->{$pod2man}{$instpod} = $man;
+      
+      #print "\n";
+      #print "$mlpod\n";
+      #print "  $mlpod ==> $pod$bld\n";
+      #print "  $pod ==> $instpod\n";
+      #print "  $instpod ==> $man\n";
+    }
   }
   $ATTR->{clean}{FILES} = join(' ',@clean_FILES);
   $ATTR;

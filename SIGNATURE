@@ -1,0 +1,60 @@
+This file contains message digests of all files listed in MANIFEST,
+signed via the Module::Signature module, version 0.53.
+
+To verify the content in this distribution, first make sure you have
+Module::Signature installed, then type:
+
+    % cpansign -v
+
+It will check each file's integrity, as well as the signature's
+validity.  If "==> Signature verified OK! <==" is not displayed,
+the distribution may already have been compromised, and you should
+not run its Makefile.PL or Build.PL.
+
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+SHA1 fdea9d0d02d2dbd547053bab7b28bd27e4f52850 Changes
+SHA1 54c0f62e7e753c50bf610751d17fdab26b949ddb MANIFEST
+SHA1 0223b689020abb0a9de86ee1977d208df7ed2dd7 META.yml
+SHA1 2db1bc4c94d0b6dec42d00b0cafaaed19fb006c2 Makefile.PL
+SHA1 ade3b52e0b18937a55257a859f0c4c3393dbed48 README
+SHA1 16a3095bae98b9314008c4de98a9705a7eea7d7d bin/mlpod2html
+SHA1 8cc28c4c993f25a21527e5e96ec1b3a791d1d355 bin/mlpod2html.mlpod
+SHA1 34da969a77a9774d8c69dd182fae1b9902932eeb bin/mlpod2html.pod
+SHA1 a21fb8d133e6b810cff5c25271591a0d29e155dd bin/mlpod2html_ja.pod
+SHA1 cd14a2c49a48611a8f56402e9328c1ccbe376ba4 bin/mlpod2pod
+SHA1 0a46284e7d01536dd3b8311dfb9b8b1d91e1be97 bin/mlpod2pod.mlpod
+SHA1 1bd82c4a4e1879e10f5c95a2eba0a6360bb4f02e bin/mlpod2pod.pod
+SHA1 851a1cbd0a29ad62e3bfb30f49bc237e9cb5b1d2 bin/mlpod2pod_ja.pod
+SHA1 4b1d636e1412b8d4df2274cb5df1acc4ca513382 lib/Pod/MultiLang.mlpod
+SHA1 b3c056be06922262ceb2fad582178b2bf63e831b lib/Pod/MultiLang.pm
+SHA1 c0adafbced3c00f2a2ad39c90f062caaf011b2ad lib/Pod/MultiLang.pod
+SHA1 ecee8da292630e4486c8c7fad1a83fe216645c49 lib/Pod/MultiLang/Dict.mlpod
+SHA1 82a5934aaeb6e69ea406c6a66a0efd81881c2859 lib/Pod/MultiLang/Dict.pm
+SHA1 7c32f62b160c40d954d773eec7f1b38ff42b5b1c lib/Pod/MultiLang/Dict.pod
+SHA1 7419708500bb4a1153af40504d20c68bf48b96e3 lib/Pod/MultiLang/Dict/ja.mlpod
+SHA1 438e2bfad763581e39ac5f3941bd46d07e2dad62 lib/Pod/MultiLang/Dict/ja.pm
+SHA1 50fd6b88d7d490c00e477160ada60dc4054d89af lib/Pod/MultiLang/Dict/ja.pod
+SHA1 ece33dbedb75d9da8c984826e304f1b1d896b244 lib/Pod/MultiLang/Dict/ja_ja.pod
+SHA1 88bfa8d80ae1bb96389cba4acb430588a3db9c59 lib/Pod/MultiLang/Dict_ja.pod
+SHA1 ef4a6c159dfd0707808e127c640b7b930605d57c lib/Pod/MultiLang/Html.mlpod
+SHA1 b38f9f81478ca9a08d650567ab5f986e94203d52 lib/Pod/MultiLang/Html.pm
+SHA1 f4f927199600971b1afca3ff0cee2c3c1771cbb8 lib/Pod/MultiLang/Html.pod
+SHA1 82b4f82745c26e5934fefa8a7eb371223cbc1c5c lib/Pod/MultiLang/Html_ja.pod
+SHA1 e342adad93486e4fa67378f48077f8dfe41bce93 lib/Pod/MultiLang/Pod.mlpod
+SHA1 9ed04ee08b87e74c447a19934b15604d62bdac34 lib/Pod/MultiLang/Pod.pm
+SHA1 e47e4be0c40d81b830a4b3aa23ec11674891f024 lib/Pod/MultiLang/Pod.pod
+SHA1 afd0b80a1ae859628299880b1659d9391475a25a lib/Pod/MultiLang/Pod_ja.pod
+SHA1 9b70998977056a4a546c9160e1189c3066a417fd lib/Pod/MultiLang_ja.pod
+SHA1 d50ebfd36aabf53b8f33268d11d588245dba4da6 t/00-use.t
+SHA1 e9caed70864d0525665c7ad456edbf9d5f84b6cc t/01-test.t
+SHA1 6da39b48ce64b584e4c3274bff96fc76ff484820 t/pod-coverage.t
+SHA1 0190346d7072d458c8a10a45c19f86db641dcc48 t/pod.t
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.2 (GNU/Linux)
+
+iD8DBQFEsSo8ewjCT38k4dkRAsepAKCE7l7w92eSoHXzoKteKcFXtA49rQCeJLdp
+MqIN65BPf8kjh0uX0joxfAs=
+=IwwD
+-----END PGP SIGNATURE-----
