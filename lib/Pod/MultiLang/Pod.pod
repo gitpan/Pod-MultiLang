@@ -1,8 +1,18 @@
 =encoding utf-8
 
+=for stopwords
+	MultiLang
+	MultiLang-pod
+	buildtext
+	langs
+	mlpod
+	utf-8
+	verbmsg
+
 =head1 NAME
 
-Pod::MultiLang::Pod_ja - ja;多言語 Pod を通常の pod に変換
+Pod::MultiLang::Pod - turn MultiLang-pod into just pod
+
 
 =head1 SYNOPSIS
 
@@ -32,8 +42,9 @@ pass to Pod::MultiLang->new().
 see L<Pod::MultiLang/new>.
 
 
-specify using languals. 
-not specifieds are ignore if it exists in mlpod document.
+specify languages. 
+paragraphs which exist in mlpod document but not selected with
+C<langs> are ignored in result.
 
 
 =item in_charset

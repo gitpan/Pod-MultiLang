@@ -1,5 +1,26 @@
 =encoding utf-8
 
+=for stopwords
+	MultiLang-pod
+	addindex
+	buildhtml
+	buildtitle
+	escapeHtml
+	escapeUrl
+	html
+	langs
+	makelink
+	makelinkanchor
+	mlpod
+	plainize
+	poddir
+	resolveLink
+	resolvePodEscape
+	unescapeHtml
+	utf-8
+	verbmsg
+	xhtml
+
 =head1 NAME
 
 Pod::MultiLang::Html - turn MultiLang-pod into html
@@ -21,8 +42,8 @@ Pod::MultiLang は L<Pod::Parser> を基底としているので,
 基本的な使用方法はそれにならいます. 
 >>
 
-command/verbatim/textblock methods only do push paragraphys 
-into an array, and end_pod method do convertion.
+command/verbatim/textblock methods only do push paragraphs 
+into an array, and end_pod method do conversion.
 (these process is in Pod::MultiLang.)
 J<< ja;
 command/verbatim/textblock では配列への蓄積のみを行いっていて, 
@@ -66,8 +87,9 @@ Pod::MultiLang->new() に渡されます.
 L<Pod::MultiLang/new> を参照してください.
 >>
 
-specify using languals. 
-not specifieds are ignore if it exists in mlpod document.
+specify languages. 
+paragraphs which exist in mlpod document but not selected with
+C<langs> are ignored in result.
 J<< ja;
 使用する言語を指定します. 
 指定されなかった言語は, mlpod 中にあっても無視されます. 
@@ -100,7 +122,7 @@ html には位置は出力するファイルと指定したcssファイルとの
 
   poddir => [qw(html/pod html/pragma html/lib)]
 
-directories for existance check of file linked from pod.
+directories for existence check of file linked from pod.
 by array reference.
 J<< ja;
 リンク先の存在確認に使うディレクトリを指定します.

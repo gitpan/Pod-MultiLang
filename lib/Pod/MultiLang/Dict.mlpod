@@ -1,5 +1,7 @@
 =encoding utf-8
 
+=for stopwords
+
 =head1 NAME
 
 Pod::MultiLang::Dict - heading dictionary manager
@@ -13,12 +15,12 @@ J<< ja;Pod::MultiLang::Dict_ja - 見出し辞書管理 >>
 
 =head1 DESCRIPTION
 
-heading word transrate dictionary for Pod::MultiLang.
+heading word translate dictionary for Pod::MultiLang.
 J<< ja;
 Pod::MultiLang 用見出し語変換辞書.
 >>
 
-dictional for each language is placed at Pod::MultiLang::Dict::xx.
+dictionary for each language is placed at Pod::MultiLang::Dict::xx.
 loaded by use statement from load_dict;
 J<< ja;
 各言語用の辞書は, Pod::MultiLang::Dict::xx に
@@ -46,7 +48,7 @@ J<< ja;
   $dictmgr->load_dict(@langs);
   $dictmgr->load_dict(\@langs);
 
-load dictionary for specified languals.
+load dictionary for specified language.
 J<< ja;
 辞書のロード. 
 多重ロードしちゃっても大丈夫.
@@ -56,7 +58,7 @@ J<< ja;
 
   @multilingual = $dictmgr->find_word(\@langs,$text);
 
-translate english to other.
+translate English to other.
 "a AND b" is acceptable.
 J<< ja;
 指定した言語に変換.
@@ -78,8 +80,8 @@ J<< ja;辞書に必要なメソッド >>
 
   $text = $dictmgr->make_link
 
-returns hash reference which constains 
-'english' => 'translated'.
+returns hash reference which contains 
+'English word' => 'Foreign Word'.
 J<< ja;
 語句 => 訳語 なハッシュのリファレンスを返す.
 >>

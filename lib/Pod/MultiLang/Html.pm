@@ -5,7 +5,7 @@
 #
 # Copyright 2003 YMIRLINK,Inc.
 # -----------------------------------------------------------------------------
-# $Id: /perl/Pod-MultiLang/lib/Pod/MultiLang/Html.pm 116 2006-07-09T15:52:31.021201Z hio  $
+# $Id: /perl/Pod-MultiLang/lib/Pod/MultiLang/Html.pm 219 2006-11-15T14:02:45.773335Z hio  $
 # -----------------------------------------------------------------------------
 package Pod::MultiLang::Html;
 use strict;
@@ -13,7 +13,6 @@ use vars qw($VERSION);
 BEGIN{
 $VERSION = '0.01';
 }
-use Encode qw(from_to);
 
 use File::Spec::Functions;
 use Hash::Util qw(lock_keys);
@@ -24,7 +23,8 @@ use Pod::ParseLink;
 
 use Pod::MultiLang;
 use Pod::MultiLang::Dict;
-our @ISA = qw(Pod::MultiLang Pod::Parser);
+our @ISA = qw(Pod::MultiLang);
+
 use constant
 {
   PARA_VERBATIM  => 1,
@@ -37,6 +37,8 @@ use constant
   PARA_END       => 8,
   PARA_FOR       => 9,
   PARA_ENCODING  => 10,
+  PARA_POD       => 11,
+  PARA_CUT       => 12,
 };
 use constant
 {
@@ -53,10 +55,6 @@ use constant
 use constant
 {
   DEFAULT_LANG => 'en',
-};
-use constant
-{
-  ENCODE_FLAG => Encode::FB_HTMLCREF,
 };
 use constant
 {
@@ -255,7 +253,7 @@ sub new
   $parser->{opt_missing_dir} = $arg{missing_dir};
   $parser->{opt_use_index} = 1;
   $parser->{opt_default_lang} = $arg{default_lang} || DEFAULT_LANG;
-  $parser->{_in_charset} = $arg{in_charet} || 'utf-8';
+  $parser->{_in_charset}  = $arg{in_charset} || 'utf-8';
   $parser->{_out_charset} = $arg{out_charset} || 'utf-8';
   $parser->{_langstack} = undef;
   $parser->{linkcache} = {};
@@ -277,7 +275,7 @@ sub new
 	       _INPUT_STREAMS
 	      )} = ();
   #_SELECTED_SECTIONS
-  lock_keys(%$parser);
+  #lock_keys(%$parser);
   
   # ディレクトリは末尾/付きに正規化
   foreach(@{$parser->{opt_poddir}},@$parser{qw(opt_missing_poddir opt_missing_pragmadir opt_missing_dir)})
@@ -1023,30 +1021,6 @@ sub rebuild
 }
 
 # -----------------------------------------------------------------------------
-# $out = $this->_from_to($src,$pos);
-# 文字セット変換
-#
-sub _from_to
-{
-  my $this = shift;
-  my $text = shift;
-  my $pos = shift;
-  if( $this->{_in_charset} ne $this->{_out_charset} )
-  {
-    my $ret = from_to($text,$this->{_in_charset},$this->{_out_charset},ENCODE_FLAG|Encode::FB_WARN);
-    if( !defined($ret) )
-    {
-      #print STDERR " [$text]\n";
-      #defined($pos) or $pos = '(unknown)';
-      #ref($pos) and $pos = $pos->file_line();
-      #print STDERR "  at $pos\n";
-      from_to($text,$this->{_in_charset},$this->{_out_charset},ENCODE_FLAG);
-    }
-  }
-  $text;
-}
-
-# -----------------------------------------------------------------------------
 # output_html
 #   htmlを出力
 #
@@ -1079,7 +1053,7 @@ sub output_html
     foreach($plain_title,$block_title,$made,$charset,$css)
     {
       defined($_) or next;
-      from_to($_,$parser->{_in_charset},$parser->{_out_charset},ENCODE_FLAG);
+      $_ = $parser->_from_to($_);
     }
   }
   
@@ -1166,8 +1140,6 @@ sub output_html
     my ($paratype,$paraobj) = @$_[PARAINFO_TYPE,PARAINFO_PARAOBJ];
     $parser->{_iseqstack} = [];
     
-    my $outtext;
-
     # ignore 状態の確認
     # 
     if( grep{$_->[STK_BEHAVIOR]eq BHV_IGNORE}@blockstack )
@@ -1178,7 +1150,7 @@ sub output_html
       {
 	my $fin = pop(@blockstack);
 	my $mode = $_->[PARAINFO_CONTENT];
-	$outtext .= "<!-- end [$mode] behavior [$fin->[STK_BEHAVIOR]] -->\n";
+	my $outtext = "<!-- end [$mode] behavior [$fin->[STK_BEHAVIOR]] -->\n";
 	print $out_fh $parser->_from_to($outtext);
       }
       next;
@@ -1201,14 +1173,15 @@ sub output_html
       {
         $text =~ s/\n+$/\n/;
 	my $outtext = qq(<pre class="$parser->{_cssprefix}verbatim"><code>$text</code></pre>\n\n);
-	$outtext = $parser->_from_to($outtext);
 	print $out_fh $outtext;
       }
       @verbpack = ();
     }
     
     # 普通に出力処理.
+    # $outtext には _from_to 済みのテキストを追加.
     # 
+    my $outtext;
     if( $paratype==PARA_TEXTBLOCK )
     {
       my $text = $parser->buildhtml($paraobj);
@@ -1335,6 +1308,10 @@ sub output_html
       $text = $parser->_from_to($text);
       $text =~ s/\n(\s*\n)+/\n/g;
       $outtext = "<!-- =$cmd $text -->\n";
+    }elsif( $paratype==PARA_POD )
+    {
+    }elsif( $paratype==PARA_CUT )
+    {
     }else
     {
       $parser->verbmsg(VERBOSE_ERROR,"what\'s got?? [$paratype]");
@@ -1342,7 +1319,7 @@ sub output_html
     }
     if( defined($outtext) )
     {
-      $outtext = $parser->_from_to($outtext);
+      # $outtext は _from_to 済み.
       print $out_fh $outtext;
     }
   }
@@ -1467,15 +1444,15 @@ sub resolvePodEscape
     }elsif( $_ eq 'sol' )
     {
       $_ = '/';
-    }elsif( $_ =~ /^0x([0-9a-fA-F])$/ )
+    }elsif( $_ =~ /^0x([0-9a-fA-F]+)$/ )
     {
-      $_ = hex($1)<256 ? chr(hex($1)) : "&#x$1;";
+      $_ = "&#x$1;";
     }elsif( $_ =~ /^0([0-7]+)$/ )
     {
-      $_ = oct($1)<256 ? chr(oct($1)) : "&#".oct($1).";";
+      $_ = "&#".oct($1).";";
     }elsif( $_ =~ /^\d+$/ )
     {
-      $_ = $_<256 ? chr($_) : "&#$_;";
+      $_ = "&#$_;";
     }else
     {
       $_ = "&$_;";
@@ -1518,5 +1495,5 @@ sub resolveLink
 1;
 __END__
 # -----------------------------------------------------------------------------
-# End Of File.
+# End of File.
 # -----------------------------------------------------------------------------

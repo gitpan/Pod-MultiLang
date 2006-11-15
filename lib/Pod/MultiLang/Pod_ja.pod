@@ -1,10 +1,17 @@
 =encoding utf-8
 
+=for stopwords
+	MultiLang
+	MultiLang-pod
+	buildtext
+	langs
+	mlpod
+	utf-8
+	verbmsg
+
 =head1 名前
 
-Pod::MultiLang::Pod - turn MultiLang-pod into just pod
-
-
+Pod::MultiLang::Pod_ja - 多言語 Pod を通常の pod に変換
 
 =head1 概要
 

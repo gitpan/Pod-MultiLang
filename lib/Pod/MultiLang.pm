@@ -5,14 +5,14 @@
 #
 # Copyright YAMASHINA Hio
 # -----------------------------------------------------------------------------
-# $Id: /perl/Pod-MultiLang/lib/Pod/MultiLang.pm 119 2006-07-09T16:05:04.291809Z hio  $
+# $Id: /perl/Pod-MultiLang/lib/Pod/MultiLang.pm 220 2006-11-15T14:06:56.922433Z hio  $
 # -----------------------------------------------------------------------------
 package Pod::MultiLang;
 use strict;
 use warnings;
 
 use vars qw($VERSION);
-$VERSION = '0.09';
+$VERSION = '0.10';
 
 use Pod::Parser;
 use Pod::InputObjects;
@@ -31,6 +31,8 @@ use constant
   PARA_END       => 8,
   PARA_FOR       => 9,
   PARA_ENCODING  => 10,
+  PARA_POD       => 11,
+  PARA_CUT       => 12,
 };
 use constant
 {
@@ -143,13 +145,14 @@ sub command
     my $info = pop(@{$parser->{_neststack}});
     if( ref($info) )
     {
-      warn "empty =over .. =back, at ".$info->[0][PARAINFO_PARAOBJ]->file_line()."\n";
+      #warn "empty =over .. =back, at ".$info->[0][PARAINFO_PARAOBJ]->file_line()."\n";
       foreach(@$info)
       {
 	$_->[PARAINFO_LISTTYPE] = LISTTYPE_UL;
       }
       $info = LISTTYPE_UL;
-    }elsif( !defined($info) )
+    }
+    if( !defined($info) )
     {
       warn "=back without =over at ".$para->[PARAINFO_PARAOBJ]->file_line()."\n";
       $info = LISTTYPE_UL;
@@ -188,8 +191,6 @@ sub command
     $para->[PARAINFO_LISTTYPE] = $parser->{_neststack}[-1];
     push(@{$parser->{paras}},$para);
     push(@{$parser->{items}},$para);
-  }elsif( $command eq 'cut' || $command eq 'pod' )
-  {
   }elsif( $command eq 'begin' )
   {
     my $para = [PARA_BEGIN,$pod_para];
@@ -208,6 +209,16 @@ sub command
   }elsif( $command eq 'encoding' )
   {
     my $para = [PARA_ENCODING,$pod_para];
+    $para->[PARAINFO_CONTENT] = $paragraph;
+    push(@{$parser->{paras}},$para);
+  }elsif( $command eq 'cut' )
+  {
+    my $para = [PARA_CUT,$pod_para];
+    $para->[PARAINFO_CONTENT] = $paragraph;
+    push(@{$parser->{paras}},$para);
+  }elsif( $command eq 'pod' )
+  {
+    my $para = [PARA_POD,$pod_para];
     $para->[PARAINFO_CONTENT] = $paragraph;
     push(@{$parser->{paras}},$para);
   }else
@@ -277,6 +288,7 @@ sub makelinktext
 
 # -----------------------------------------------------------------------------
 # ($lang,$text) = $parser->parseLang($text);
+#  parse J<> sequence.
 #   J<> の中身を解析.
 #
 sub parseLang
@@ -287,8 +299,31 @@ sub parseLang
   ($lang,$text);
 }
 
+# -----------------------------------------------------------------------------
+# $out = $this->_from_to($src,$pos);
+# charset conversion.
+# 文字セット変換
+#
+sub _from_to
+{
+  my $this = shift;
+  my $text = shift;
+  my $pos = shift;
+	
+  if( $this->{_in_charset} ne $this->{_out_charset} )
+  {
+		use Encode ();
+		my $flag = &Encode::FB_HTMLCREF;# | &Encode::FB_WARN;
+    $text = Encode::encode($this->{_out_charset}, Encode::decode($this->{_in_charset}, $text), $flag);
+    #$text = encode($this->{_out_charset}, decode($this->{_in_charset}, $text));
+    #$text = Unicode::Japanese->new($text, "utf8")->euc;
+		#$text =~ s/([^ -~])/sprintf("[%02x]",unpack("C",$1))/ge;
+  }
+  $text;
+}
+
 1;
 __END__
 # -----------------------------------------------------------------------------
-# End Of File.
+# End of File.
 # -----------------------------------------------------------------------------

@@ -11,6 +11,9 @@ bin/mlpod2pod
 bin/mlpod2pod.mlpod
 bin/mlpod2pod.pod
 bin/mlpod2pod_ja.pod
+example/sample.mlpod
+example/triconv.sh
+inc/ExtUtils/MY_Metafile.pm
 lib/Pod/MultiLang.mlpod
 lib/Pod/MultiLang.pm
 lib/Pod/MultiLang.pod
@@ -33,6 +36,10 @@ lib/Pod/MultiLang/Pod_ja.pod
 lib/Pod/MultiLang_ja.pod
 t/00-use.t
 t/01-test.t
+t/02-escape.t
+t/03-topod.t
+t/04-encode.t
 t/pod-coverage.t
 t/pod.t
+t/textio.PL
 META.yml                                 Module meta-data (added by MakeMaker)

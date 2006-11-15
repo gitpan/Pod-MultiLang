@@ -5,7 +5,7 @@
 #
 # Copyright 2003 YMIRLINK,Inc.
 # -----------------------------------------------------------------------------
-# $Id: /perl/Pod-MultiLang/lib/Pod/MultiLang/Dict/ja.pm 117 2006-07-09T16:00:40.726552Z hio  $
+# $Id: /perl/Pod-MultiLang/lib/Pod/MultiLang/Dict/ja.pm 216 2006-11-14T15:01:52.545337Z hio  $
 # -----------------------------------------------------------------------------
 package Pod::MultiLang::Dict::ja;
 use strict;
@@ -39,9 +39,11 @@ sub static_table
    'CALLBACKS'    => 'コールバック',
    'CAVEATS'      => '警告',
    'CHANGES'      => '変更点',
+   'CONSTRUCTOR'  => 'コンストラクタ',
    'COPYRIGHT'    => '著作権',
-   'ENVIRONMENT VARIABLES'  => '環境変数',
+   'DEPENDENCIES' => '依存',
    'ENVIRONMENT'  => '環境',
+   'ENVIRONMENT VARIABLES'  => '環境変数',
    'EVENTS'       => 'イベント',
    'EXAMPLE'      => '例',
    'EXPORTS'      => 'エクスポート',
@@ -84,5 +86,5 @@ sub make_linktext
 1;
 __END__
 # -----------------------------------------------------------------------------
-# End Of File.
+# End of File.
 # -----------------------------------------------------------------------------

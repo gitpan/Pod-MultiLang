@@ -1,5 +1,26 @@
 =encoding utf-8
 
+=for stopwords
+	MultiLang-pod
+	addindex
+	buildhtml
+	buildtitle
+	escapeHtml
+	escapeUrl
+	html
+	langs
+	makelink
+	makelinkanchor
+	mlpod
+	plainize
+	poddir
+	resolveLink
+	resolvePodEscape
+	unescapeHtml
+	utf-8
+	verbmsg
+	xhtml
+
 =head1 名前
 
 Pod::MultiLang::Html_ja - 多言語 Pod を html に変換

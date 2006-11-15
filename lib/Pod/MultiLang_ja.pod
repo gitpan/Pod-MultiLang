@@ -1,12 +1,24 @@
 =encoding utf-8
 
+=for stopwords
+	YAMASHINA
+	Hio
+	AnnoCPAN
+	CPAN
+	RT
+	TODO
+	ja.utf8
+	makelinktext
+	parseLang
+	textblock
+
 =head1 名前
 
 Pod::MultiLang_ja - 多言語対訳Pod
 
 =head1 バージョン
 
-Versoin 0.09
+Version 0.10
 
 
 =head1 概要
@@ -65,14 +77,57 @@ sample output.
  en:  "somewhere" in example (linkto:example/somewhere)
  ja:  example 内 "どこか" (linkto:example/somewhere)
 
-<!-- begin [COMMENT] behavior [ignore] -->
+=begin COMMENT
+
+JZ<><<>>の外をデフォルト言語にして処理.
+
+
+  content
+  J<< xx;content-in-xx >>
+
+とあったときに,
+
+
+  J<< (default-lang);content >>
+  J<< xx;content-in-xx >>
+
+で処理.
+でも,
+
+
+  content
+
+だけなら, 言語指定なしでそのまま
+
+
+  content
+
+で出力.
+
+
+=end COMMENT
+
 =head1 今後の予定
 
 verbatim 段落の多言語化はまだ仕様化されていません.
 
-<!-- begin [COMMENT] behavior [ignore] -->
-<!-- begin [COMMENT] behavior [ignore] -->
-JZ<>< en,ja;英語と日本語. >.
+=begin COMMENT
+
+ default text.
+ 
+ =begin :block
+ 
+ =for mlpodopt lang ja
+ 
+  japanese verbatim block.
+
+ =for mlpodopt lang fr
+ 
+  un bloc verbatim en francais
+
+ =end :block
+
+=end COMMENT
 
 =head1 ユーティリティメソッド.
 

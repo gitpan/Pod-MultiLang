@@ -1,6 +1,7 @@
 
 use ExtUtils::MakeMaker;
 use strict;
+use inc::ExtUtils::MY_Metafile;
 
 my @MLPODFILES = qw( bin/mlpod2html.mlpod
                      bin/mlpod2pod.mlpod
@@ -11,26 +12,51 @@ my @MLPODFILES = qw( bin/mlpod2html.mlpod
                      lib/Pod/MultiLang/Pod.mlpod
                     );
 
-my $pod_refresh = q{find lib -name '*.mlpod' | while read f; do d=`dirname $f`/`basename $f .mlpod`; perl -Ilib bin/mlpod2pod --langs=ja $d.mlpod >  "${d}_ja.pod"; done};
+my $pod_refresh = q{
+	find lib -name '*.mlpod' |
+	while read f;
+	do
+		d=`dirname $f`/`basename $f .mlpod`;
+		perl -Ilib bin/mlpod2pod --langs=ja $d.mlpod > "${d}_ja.pod";
+	done
+};
 $pod_refresh =~ s/\$/\$\$/g;
+$pod_refresh =~ tr/\n//d;
 
 my %ATTR = 
 (
   NAME         => 'Pod::MultiLang',
   VERSION_FROM => 'lib/Pod/MultiLang.pm',
+  AUTHOR        => 'YAMASHINA Hio <hio@cpan.org>',
+  ABSTRACT_FROM => 'lib/Pod/MultiLang.pod',
   EXE_FILES    => [qw(bin/mlpod2html bin/mlpod2pod bin/mlpod2html.mlpod bin/mlpod2pod.mlpod)],
+  PREREQ_PM => {
+    'Test::More' => 0,
+    'Pod::Parser' => 0,
+  },
   depend       => {
                    '.SUFFIXES' => '.mlpod .pod',
                    '.mlpod.pod' => ';$(PERLRUNINST) bin/mlpod2pod $< > $@',
                    'pod-refresh' => ";$pod_refresh",
                   },
 );
-mlpodconvertion(\%ATTR,@MLPODFILES);
+add_mlpodconvertion(\%ATTR,@MLPODFILES);
+
+my_metafile 'Pod::MultiLang' => {
+	license => 'perl',
+	requires => {
+		'Pod::Parser' => 0,
+	},
+	build_requires => {
+		'Test::More' => 0,
+	},
+};
+
 WriteMakefile(%ATTR);
 
 # -----------------------------------------------------------------------------
 # 
-sub mlpodconvertion
+sub add_mlpodconvertion
 {
   my $ATTR = shift;
   my $CP = '$(PERLRUNINST) -MExtUtils::Command -e cp ';
@@ -92,3 +118,7 @@ sub mlpodconvertion
   $ATTR->{clean}{FILES} = join(' ',@clean_FILES);
   $ATTR;
 }
+
+# -----------------------------------------------------------------------------
+# End of File.
+# -----------------------------------------------------------------------------

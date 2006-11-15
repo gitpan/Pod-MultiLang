@@ -12,7 +12,6 @@
 package Mlpod2html;
 use strict;
 
-use Encode;
 BEGIN
 {
   if( 0 )
@@ -58,6 +57,21 @@ sub do_work
     {
       my $v = shift;
       $opt{outfile} = ($v=~/(.*)/)[0];
+    }elsif( $_ eq '-h' || $_ eq '--help' )
+    {
+      print "usage: mlpod2html [options] file\n";
+			print "options:\n";
+			my $opts = { (map{$_=>'list'}@arraykeys), (map{$_=>'scalar'}@paramkeys)};
+			foreach my $key (sort keys %$opts)
+			{
+				my $pad = ' 'x(17-length($key));
+				print "  --$key$pad [$opts->{$key}]\n";
+			}
+      exit;
+    }elsif( $_ eq '-V' || $_ eq '--version' )
+    {
+      print "mlpod2html version $Pod::MultiLang::Html::VERSION\n";
+      exit;
     }elsif( /^--([\w-]+)(=?)(.*)$/ )
     {
       my ($k,$set,$v) = ($1,$2,$3);
@@ -120,5 +134,5 @@ sub do_work
 1;
 __END__
 # -----------------------------------------------------------------------------
-# End Of File.
+# End of File.
 # -----------------------------------------------------------------------------

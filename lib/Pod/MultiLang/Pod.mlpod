@@ -1,9 +1,18 @@
 =encoding utf-8
 
+=for stopwords
+	MultiLang
+	MultiLang-pod
+	buildtext
+	langs
+	mlpod
+	utf-8
+	verbmsg
+
 =head1 NAME
 
 Pod::MultiLang::Pod - turn MultiLang-pod into just pod
-J<< Pod::MultiLang::Pod_ja - ja;多言語 Pod を通常の pod に変換 >>
+J<< ja; Pod::MultiLang::Pod_ja - 多言語 Pod を通常の pod に変換 >>
 
 =head1 SYNOPSIS
 
@@ -43,8 +52,9 @@ Pod::MultiLang->new() に渡されます.
 L<Pod::MultiLang/new> を参照してください.
 >>
 
-specify using languals. 
-not specifieds are ignore if it exists in mlpod document.
+specify languages. 
+paragraphs which exist in mlpod document but not selected with
+C<langs> are ignored in result.
 J<< ja;
 使用する言語を指定します. 
 指定されなかった言語は, mlpod 中にあっても無視されます. 

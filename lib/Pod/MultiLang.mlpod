@@ -1,5 +1,17 @@
 =encoding utf-8
 
+=for stopwords
+	YAMASHINA
+	Hio
+	AnnoCPAN
+	CPAN
+	RT
+	TODO
+	ja.utf8
+	makelinktext
+	parseLang
+	textblock
+
 =head1 NAME
 
 Pod::MultiLang - multi languages in Pod
@@ -7,7 +19,7 @@ J<< ja;Pod::MultiLang_ja - 多言語対訳Pod >>
 
 =head1 VERSION
 
-Versoin 0.09
+Version 0.10
 
 =head1 SYNOPSIS
 
@@ -17,9 +29,9 @@ Versoin 0.09
 
 =head1 DESCRIPTION
 
-Pod::MultiLang is a pod extesion. 
+Pod::MultiLang is a pod extension. 
 This module implements JZ<><> interior sequence for write multi 
-langages in sigle pod. 
+languages in single pod. 
 One languages enclosed by J interior sequence in each paragraph. 
 Some heading words are translated automatically. 
 Note that JZ<><> is not official interior sequence, 
@@ -132,20 +144,6 @@ verbatim 段落の多言語化はまだ仕様化されていません.
  =end :block
 
 =end COMMENT
-
-=begin COMMENT
-
-JZ<>< *;for all langs, e.g. COPYRIGHT text >.
-J<< ja;
-JZ<>< *;どの言語でも共通. COPYTIGHT 表記とか. >
->>
-
-=end COMMENT
-
-JZ<>< en,ja;for English and Japanese >.
-J<< ja;
-JZ<>< en,ja;英語と日本語. >.
->>
 
 =head1 UTILITY METHODS
 J<< ja; ユーティリティメソッド. >>

@@ -5,11 +5,10 @@
 #
 # Copyright 2003 YMIRLINK,Inc.
 # -----------------------------------------------------------------------------
-# $Id: /perl/Pod-MultiLang/lib/Pod/MultiLang/Pod.pm 116 2006-07-09T15:52:31.021201Z hio  $
+# $Id: /perl/Pod-MultiLang/lib/Pod/MultiLang/Pod.pm 219 2006-11-15T14:02:45.773335Z hio  $
 # -----------------------------------------------------------------------------
 package Pod::MultiLang::Pod;
 use strict;
-use Encode qw(from_to);
 
 use File::Spec::Functions;
 use Hash::Util qw(lock_keys);
@@ -33,6 +32,8 @@ use constant
   PARA_END       => 8,
   PARA_FOR       => 9,
   PARA_ENCODING  => 10,
+  PARA_POD       => 11,
+  PARA_CUT       => 12,
 };
 use constant
 {
@@ -49,10 +50,6 @@ use constant
 use constant
 {
   DEFAULT_LANG => 'en',
-};
-use constant
-{
-  ENCODE_FLAG => Encode::FB_HTMLCREF,
 };
 use constant
 {
@@ -146,7 +143,7 @@ sub new
   #
   $parser->{opt_use_index} = 1;
   $parser->{opt_default_lang} = $arg{default_lang} || DEFAULT_LANG;
-  $parser->{_in_charset} = $arg{in_charet} || 'utf-8';
+  $parser->{_in_charset}  = $arg{in_charset} || 'utf-8';
   $parser->{_out_charset} = $arg{out_charset} || 'utf-8';
   $parser->{_langstack} = undef;
   $parser->{linkcache} = {};
@@ -163,7 +160,7 @@ sub new
 	       _INPUT_STREAMS
 	      )} = ();
   #_SELECTED_SECTIONS
-  lock_keys(%$parser);
+  #lock_keys(%$parser);
   
   $parser;
 }
@@ -556,30 +553,6 @@ sub rebuild
 }
 
 # -----------------------------------------------------------------------------
-# $out = $this->_from_to($src,$pos);
-# 文字セット変換
-#
-sub _from_to
-{
-  my $this = shift;
-  my $text = shift;
-  my $pos = shift;
-  if( $this->{_in_charset} ne $this->{_out_charset} )
-  {
-    my $ret = from_to($text,$this->{_in_charset},$this->{_out_charset},ENCODE_FLAG|Encode::FB_WARN);
-    if( !defined($ret) )
-    {
-      #print STDERR " [$text]\n";
-      #defined($pos) or $pos = '(unknown)';
-      #ref($pos) and $pos = $pos->file_line();
-      #print STDERR "  at $pos\n";
-      from_to($text,$this->{_in_charset},$this->{_out_charset},ENCODE_FLAG);
-    }
-  }
-  $text;
-}
-
-# -----------------------------------------------------------------------------
 # output_pod
 #   podを出力
 #
@@ -615,8 +588,6 @@ sub output_pod
     my ($paratype,$paraobj) = @$_[PARAINFO_TYPE,PARAINFO_PARAOBJ];
     $parser->{_iseqstack} = [];
     
-    my $outtext = '';
-
     # ignore 状態の確認
     # 
     if( grep{$_->[STK_BEHAVIOR]eq BHV_IGNORE}@blockstack )
@@ -627,7 +598,7 @@ sub output_pod
       {
 	my $fin = pop(@blockstack);
 	my $mode = $_->[PARAINFO_CONTENT];
-	$outtext .= "";
+	my $outtext = "";
 	print $out_fh $parser->_from_to($outtext);
       }
       next;
@@ -657,7 +628,9 @@ sub output_pod
     }
     
     # 普通に出力処理.
+    # $outtext には _from_to 済みのテキストを追加.
     # 
+    my $outtext;
     if( $paratype==PARA_TEXTBLOCK )
     {
       my $text = $parser->buildtext($paraobj);
@@ -718,38 +691,21 @@ sub output_pod
 	$parser->vermsg(VERBOSE_ERROR,"unknown list type [$type]");
       }
       $first_item and undef($first_item),++$in_item;
-    }elsif( $paratype==PARA_BEGIN )
-    {
-      my @stk;
-      @stk[STK_PARAOBJ,STK_BEHAVIOR] = ($_,BHV_IGNORE);
-      push(@blockstack,\@stk);
-      my $mode = $_->[PARAINFO_CONTENT];
-      if( $mode eq 'html' )
-      {
-	$outtext .= "<!-- begin [$mode] behavior [normal] -->\n";
-	$stk[STK_BEHAVIOR] = BHV_NORMAL;
-      }elsif( $mode eq 'text' )
-      {
-	$outtext .= "<!-- begin [$mode] behavior [verbatim] -->\n";
-	$stk[STK_BEHAVIOR] = BHV_VERBATIM;
-      }else
-      {
-	$outtext .= "<!-- begin [$mode] behavior [ignore] -->\n";
-      }
-    }elsif( $paratype==PARA_END )
-    {
-      my $fin = pop(@blockstack);
-      my $mode = $_->[PARAINFO_CONTENT];
-      $outtext .= "<!-- end [$mode] behavior [$fin->[STK_BEHAVIOR]] (started by [$fin->[STK_PARAOBJ][PARAINFO_CONTENT]]) -->\n";
-    }elsif( $paratype==PARA_FOR )
-    {
-    }elsif( $paratype==PARA_ENCODING )
+    }elsif( $paratype==PARA_BEGIN || $paratype==PARA_END
+            || $paratype==PARA_FOR || $paratype==PARA_ENCODING
+            || $paratype==PARA_POD || $paratype==PARA_CUT )
     {
       my $text = $_->[PARAINFO_CONTENT];
       my $cmd = $paraobj->cmd_name();
-      $text = $parser->_from_to($text);
-      $text =~ s/\n(\s*\n)+/\n/g;
-      $outtext = "=$cmd $text\n\n";
+			if( $text ne '' )
+			{
+				$text = $parser->_from_to($text);
+				$text =~ s/\n(\s*\n)+/\n/g;
+				$outtext = "=$cmd $text\n\n";
+			}else
+			{
+				$outtext = "=$cmd\n\n";
+			}
     }else
     {
       $parser->verbmsg(VERBOSE_ERROR,"what\'s got?? [$paratype]");
@@ -757,7 +713,7 @@ sub output_pod
     }
     if( defined($outtext) )
     {
-      $outtext = $parser->_from_to($outtext);
+      # $outtext は _from_to 済み.
       print $out_fh $outtext;
     }
   }
@@ -782,5 +738,5 @@ sub output_pod
 1;
 __END__
 # -----------------------------------------------------------------------------
-# End Of File.
+# End of File.
 # -----------------------------------------------------------------------------
