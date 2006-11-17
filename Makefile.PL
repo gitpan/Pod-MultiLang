@@ -36,7 +36,7 @@ my %ATTR =
   },
   depend       => {
                    '.SUFFIXES' => '.mlpod .pod',
-                   '.mlpod.pod' => ';$(PERLRUNINST) bin/mlpod2pod $< > $@',
+                   '.mlpod.pod' => ';$(PERLRUNINST) bin/mlpod2pod $*.mlpod > $*.pod',
                    'pod-refresh' => ";$pod_refresh",
                   },
 );
@@ -91,25 +91,24 @@ sub add_mlpodconvertion
     $instpod_base =~ s/bin/\$(INST_SCRIPT)/;
     $instpod_base =~ s/lib/\$(INST_LIB)/;
     
-    my $ja_builder = '$(PERLRUNINST) bin/mlpod2pod --langs=ja $< > $@';
-    my $builder = { _ja => "; $ja_builder", };
-    foreach my $lang ('', '_ja')
+    foreach my $lang ('', 'ja')
     {
       # lib/*.mlpod ==> lib/*.pod
-      my $pod = $mlpod_basename . $lang . '.pod';
-      my $bld = $builder->{$lang} || '';
+			my $_lang = $lang ? "_$lang" : '';
+      my $pod = "${mlpod_basename}$_lang.pod";
+      my $bld = $lang ? ";\$(PERLRUNINST) bin/mlpod2pod --langs=$lang $mlpod > $pod" : '';
       $ATTR->{depend}{$pod} = $mlpod . $bld;
       
       # {bin/lib}/*.pod ==> blib/{script/lib}/*.pod
-      my $instpod = $instpod_base . $lang . '.pod';
-      $ATTR->{depend}{$instpod} = "$pod; $CP \$< \$\@";
+      my $instpod = "${instpod_base}$_lang.pod";
+      $ATTR->{depend}{$instpod} = "$pod; $CP $pod $instpod";
       
       # blib/*.pod ==> blib/man*
-      my $man = "\$(INST_MAN${mannum}DIR)/${manname}$lang.${mansect}";
+      my $man = "\$(INST_MAN${mannum}DIR)/${manname}$_lang.${mansect}";
       $ATTR->{$pod2man}{$instpod} = $man;
       
       #print "\n";
-      #print "$mlpod\n";
+      #print "$mlpod ($lang)\n";
       #print "  $mlpod ==> $pod$bld\n";
       #print "  $pod ==> $instpod\n";
       #print "  $instpod ==> $man\n";

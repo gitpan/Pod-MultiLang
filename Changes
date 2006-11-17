@@ -1,5 +1,9 @@
 (ja.utf-8)
 
+ v0.11 (2006/11/17)
+       [ja] freebsd で make に失敗する不具合の修正.
+       [en] fix, make failure on freebsd.
+ 
  v0.10 (2006/11/15)
        [ja] HTML化時にE<>を復元しないように.
        [en] fix, keep E<> as &#xxx without unescape
