@@ -5,13 +5,13 @@
 #
 # Copyright 2003 YMIRLINK,Inc.
 # -----------------------------------------------------------------------------
-# $Id: /perl/Pod-MultiLang/lib/Pod/MultiLang/Html.pm 219 2006-11-15T14:02:45.773335Z hio  $
+# $Id: /perl/Pod-MultiLang/lib/Pod/MultiLang/Html.pm 576 2007-12-14T03:42:08.276999Z hio  $
 # -----------------------------------------------------------------------------
 package Pod::MultiLang::Html;
 use strict;
 use vars qw($VERSION);
 BEGIN{
-$VERSION = '0.01';
+$VERSION = '0.02';
 }
 
 use File::Spec::Functions;
@@ -69,6 +69,8 @@ use constant
   VERBOSE_FULL     => 100,
 };
 
+our $VERBOSE_DEFAULT = VERBOSE_DEFAULT;
+
 sub verbmsg
 {
   my ($parser,$level) = @_;
@@ -89,16 +91,29 @@ sub makelink
   $sec_anchor ||= $sec;
   defined($target) or $target = '';
   
+  my $link_info;
+
   if( exists($parser->{linkcache}{$target}) )
   {
+    $link_info = $parser->{linkcache}{$target};
   }elsif( $target eq '' )
   {
-    $parser->{linkcache}{''} = '';
+    $link_info = {
+      base => '',
+      path => '',
+      href => '',
+    };
+    $parser->{linkcache}{''} = $link_info;
   }elsif( $target =~ /\(\d+\w?\)$/ )
   {
     # 多分man. 適当に^^;
     # 
-    $parser->{linkcache}{$target} = "man:$target";
+    $link_info = {
+      base => "man:",
+      path => "$target",
+      href => undef,
+    };
+    $parser->{linkcache}{$target} = $link_info;
   }else
   {
     #   Pkg/Class.html
@@ -130,36 +145,54 @@ sub makelink
     }
     if( $found )
     {
-      $parser->{linkcache}{$target} = $parser->{out_topdir}.$found;
+      $link_info = {
+        base => $parser->{out_topdir},
+        path => $found,
+        href => undef,
+      };
+      $parser->{linkcache}{$target} = $link_info,
       $parser->{_verbose}>=VERBOSE_FINDLINK and $parser->verbmsg(VERBOSE_FINDLINK,"[$target] ==> [$found]\n");
     }else
     {
       # not found.
       # 
+      my $missing_base;
       if( defined($parser->{opt_missing_poddir}) && $target=~/^perl\w*$/ )
       {
-        $found = "$parser->{opt_missing_poddir}$file1";
+        $missing_base = $parser->{opt_missing_poddir};
       }elsif( defined($parser->{opt_missing_pragmadir}) && $target =~ /^[a-z]/ )
       {
-        $found = "$parser->{opt_missing_pragmadir}$file1";
+        $missing_base = $parser->{opt_missing_pragmadir};
       }elsif( defined($parser->{opt_missing_dir}) )
       {
-        $found = "$parser->{opt_missing_dir}$file1";
+        $missing_base = $parser->{opt_missing_dir};
       }else
       {
-        $found = "$parser->{out_topdir}$file1";
+        $missing_base = $parser->{out_topdir};
       }
-      $parser->{linkcache}{$target} = $parser->{out_topdir}.$found;
-      $parser->verbmsg(VERBOSE_ERROR,"[$target] not found ==> $found\n");
+      my $href = $missing_base . $parser->escapeUrl($file1);
+      $link_info = {
+        base => $missing_base,
+        path => $file1,
+        href => $href,
+      };
+      $parser->{linkcache}{$target} = $link_info,
+      $parser->verbmsg(VERBOSE_NOLINK,"[$target] not found ==> $href\n");
     }
   }
-  my $link_to = $parser->{linkcache}{$target};
-  if( !defined($link_to) )
+
+  if( !defined($link_info->{href}) )
   {
-    $link_to = $target;
+    my $base = $link_info->{base};
+    my $path = $link_info->{path};
+    $link_info->{href} = $base . $parser->escapeUrl($path);
   }
-  $link_to = $parser->escapeUrl($link_to);
-  $sec_anchor and $link_to .= '#'.$parser->makelinkanchor($sec_anchor);
+
+  my $link_to = $link_info->{href};
+  if( $sec_anchor )
+  {
+    $link_to .= '#' . $parser->makelinkanchor($sec_anchor);
+  }
   
   if( !defined($text)||$text eq '' )
   {
@@ -294,7 +327,7 @@ sub begin_pod
   my ($parser) = @_;
   &Pod::MultiLang::begin_pod;
   
-  $parser->{_verbose} = VERBOSE_DEFAULT;
+  $parser->{_verbose} = $VERBOSE_DEFAULT;
   $parser->{_verbout} = \*STDERR;
   $parser->{_expandlangs} = undef;
   $parser->{_default_lang} = $parser->{opt_default_lang};

@@ -39,6 +39,7 @@ t/01-test.t
 t/02-escape.t
 t/03-topod.t
 t/04-encode.t
+t/05-missingurl.t
 t/pod-coverage.t
 t/pod.t
 t/textio.PL

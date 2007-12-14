@@ -1,5 +1,10 @@
 (ja.utf-8)
 
+ v0.12 (2007/12/14)
+       [ja] missing_dirでhttp://を使えないバグの修正
+            (副作用としてベースディレクトリはエスケープされなくなりました)
+       [en] fix, could not use http:// on missing_dir parameter.
+ 
  v0.11 (2006/11/17)
        [ja] freebsd で make に失敗する不具合の修正.
        [en] fix, make failure on freebsd.
