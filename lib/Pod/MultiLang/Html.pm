@@ -5,13 +5,13 @@
 #
 # Copyright 2003 YMIRLINK,Inc.
 # -----------------------------------------------------------------------------
-# $Id: /perl/Pod-MultiLang/lib/Pod/MultiLang/Html.pm 576 2007-12-14T03:42:08.276999Z hio  $
+# $Id: /perl/Pod-MultiLang/lib/Pod/MultiLang/Html.pm 578 2007-12-14T05:15:38.051888Z hio  $
 # -----------------------------------------------------------------------------
 package Pod::MultiLang::Html;
 use strict;
 use vars qw($VERSION);
 BEGIN{
-$VERSION = '0.02';
+$VERSION = '0.03';
 }
 
 use File::Spec::Functions;
@@ -348,7 +348,7 @@ sub begin_pod
   my $made = $parser->{opt_made};
   $parser->{out_outfile} = $outfile;
   $parser->{out_outdir} = $outdir;
-  $parser->{out_topdir} = File::Spec->abs2rel(cwd(),$outdir)||'';
+  $parser->{out_topdir} = File::Spec->abs2rel(cwd(),$outdir)||'.';
   $parser->{out_css} = $css;
   $parser->{out_made} = $made;
   
@@ -1002,7 +1002,7 @@ sub rebuild
       $$_[PARAINFO_PARAOBJ] = $paraobj;
     }
     
-    my $id = 'item_'.$parser->makelinkanchor($paraobj);
+    my $id = $parser->makelinkanchor($paraobj);
     $id = $parser->addindex(\%link_keys,\@link_ids,$id,$paraobj);
     
     $$_[PARAINFO_ID] = $id;

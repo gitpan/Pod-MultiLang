@@ -5,14 +5,14 @@
 #
 # Copyright YAMASHINA Hio
 # -----------------------------------------------------------------------------
-# $Id: /perl/Pod-MultiLang/lib/Pod/MultiLang.pm 574 2007-12-14T03:37:05.190917Z hio  $
+# $Id: /perl/Pod-MultiLang/lib/Pod/MultiLang.pm 578 2007-12-14T05:15:38.051888Z hio  $
 # -----------------------------------------------------------------------------
 package Pod::MultiLang;
 use strict;
 use warnings;
 
 use vars qw($VERSION);
-$VERSION = '0.12';
+$VERSION = '0.13';
 
 use Pod::Parser;
 use Pod::InputObjects;
