@@ -1,6 +1,6 @@
 # http://module-build.sourceforge.net/META-spec.html
 name:         Pod-MultiLang
-version:      0.13
+version:      0.14
 version_from: lib/Pod/MultiLang.pm
 installdirs:  site
 author:       YAMASHINA Hio <hio@cpan.org>

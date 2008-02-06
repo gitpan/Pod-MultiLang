@@ -19,7 +19,7 @@ Pod::MultiLang - multi languages in Pod
 
 =head1 VERSION
 
-Version 0.13
+Version 0.14
 
 
 =head1 SYNOPSIS

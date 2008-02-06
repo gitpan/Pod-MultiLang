@@ -14,9 +14,9 @@ not run its Makefile.PL or Build.PL.
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA1
 
-SHA1 cf86729fd4380a160ffd856c039620f3cccbb9e9 Changes
-SHA1 37eef9f7cace061821a1a88005e6e5de2ac90a94 MANIFEST
-SHA1 2dc7a3eefbd95c5d8a3773edddf388de9e4cd85e META.yml
+SHA1 6e16f17390a6553a60cba49fb846e07e347da664 Changes
+SHA1 3a95659ac8e3100c5cbd4bbaf543dc270f8f4653 MANIFEST
+SHA1 6844aa62ac04ad4a4606e6abfc9170a02563bd08 META.yml
 SHA1 aef67ad2a9379bb8928224fdeda84103e41a9b66 Makefile.PL
 SHA1 ade3b52e0b18937a55257a859f0c4c3393dbed48 README
 SHA1 e89bc71ef3094776806744c1ecf7557f526b94ef bin/mlpod2html
@@ -30,9 +30,9 @@ SHA1 851a1cbd0a29ad62e3bfb30f49bc237e9cb5b1d2 bin/mlpod2pod_ja.pod
 SHA1 139ce2d24e3b1f8da1edb2e66ae673bdaa48975f example/sample.mlpod
 SHA1 b3afd34f5b6cc5cb5c0f577abdae78ab5f33c3ac example/triconv.sh
 SHA1 f68802b45e6e1c49e933fecc2f83912504662934 inc/ExtUtils/MY_Metafile.pm
-SHA1 abe57323489ddcdd8e4763a50fda0ed54e548cd0 lib/Pod/MultiLang.mlpod
-SHA1 2c0bef3f3a919c2348f39d75aa7a89241b1eab5e lib/Pod/MultiLang.pm
-SHA1 984a02e985a0b0f53d2b7a1eec26c7c13086df4a lib/Pod/MultiLang.pod
+SHA1 3a39b90c54c41eced53d23d88bc480d55af15ee9 lib/Pod/MultiLang.mlpod
+SHA1 56c76ddd3473c72d085eee76a0a92c276a3afb6c lib/Pod/MultiLang.pm
+SHA1 bfe5b4253300705b970329054e7b9fdf0f9c04b9 lib/Pod/MultiLang.pod
 SHA1 0b94238f9d74835bffb3507345ce6d7de0a496b7 lib/Pod/MultiLang/Dict.mlpod
 SHA1 32e313afc386925fa5c3951b312ef91e0a6f922a lib/Pod/MultiLang/Dict.pm
 SHA1 e277d5dbee3c187ece5ee7c2148c9cae224d23e0 lib/Pod/MultiLang/Dict.pod
@@ -46,10 +46,10 @@ SHA1 ccabd3783da76e8bdeec293e6c994093ead523a4 lib/Pod/MultiLang/Html.pm
 SHA1 abf24e36bfb55ce49088b2651ae0edf0ffc7fd7e lib/Pod/MultiLang/Html.pod
 SHA1 b21f9e576649dbb5b3287cef85bc7bcc3751f060 lib/Pod/MultiLang/Html_ja.pod
 SHA1 ad95acdf46b6a675c4a9f464eb58a9149ed3c499 lib/Pod/MultiLang/Pod.mlpod
-SHA1 a7461f13b22321d11eba20fdaf96d33c4916e37e lib/Pod/MultiLang/Pod.pm
+SHA1 122c6c14c66cf94f88bb992b2e846b72b9d13a5e lib/Pod/MultiLang/Pod.pm
 SHA1 ca75cc69da6bc8a1525b460aadeef41cc51f2643 lib/Pod/MultiLang/Pod.pod
 SHA1 a99b999b7d0cc221aed18ccfd6e8a4e273dfef5f lib/Pod/MultiLang/Pod_ja.pod
-SHA1 31fc0286dae6aea4753a43f4b41c688fd1ba01e3 lib/Pod/MultiLang_ja.pod
+SHA1 b29c5efe13f0a1fab5e9b0c50fc1e234b1c88179 lib/Pod/MultiLang_ja.pod
 SHA1 d50ebfd36aabf53b8f33268d11d588245dba4da6 t/00-use.t
 SHA1 465b3050cd535fe39c0249424c87ad99e9f28f76 t/01-test.t
 SHA1 ca402b892c2f6b4c71eb66f66a26e628930e3df2 t/02-escape.t
@@ -60,10 +60,11 @@ SHA1 c37c76b602f0dd96dc289ec6a9c7de871678518e t/06-fragment.t
 SHA1 6da39b48ce64b584e4c3274bff96fc76ff484820 t/pod-coverage.t
 SHA1 0190346d7072d458c8a10a45c19f86db641dcc48 t/pod.t
 SHA1 35de0b326b6b3cb66e149e9495dc2c415d9d6142 t/textio.PL
+SHA1 f2822802940893255cdac02f3065286d0f398f97 t/v014_empty_link_text.t
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.2 (GNU/Linux)
 
-iD8DBQFHYhGaewjCT38k4dkRAv4YAJ41ZXObjtxHghAmqtMf9Vl6YIeP4gCfZyo8
-bNrUsbXYWpGQo+LUxymz4Y8=
-=nboD
+iD8DBQFHqXriewjCT38k4dkRAmNlAJwM+S1mFrmSRG94wwIXHZen8bWiSwCcCAEt
+bGt6xulZLdZNAu3nVwV5gqo=
+=ucbB
 -----END PGP SIGNATURE-----

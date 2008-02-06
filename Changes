@@ -1,5 +1,9 @@
 (ja.utf-8)
 
+ v0.14 (2008/02/08)
+       [ja] L<>で余計な空白テキストができることがあるバグの修正.
+       [en] fix, L<> sometimes has empty text.
+ 
  v0.13 (2007/12/14)
        [ja] L</>での判断ができないため名前付きリストのリンクIDから'item_'を除去.
        [en] fix, remove 'item_' prefix from link id.

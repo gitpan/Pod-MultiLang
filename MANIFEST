@@ -1,5 +1,6 @@
 Changes
 MANIFEST
+META.yml                                 Module meta-data (added by MakeMaker)
 Makefile.PL
 README
 SIGNATURE
@@ -44,4 +45,4 @@ t/06-fragment.t
 t/pod-coverage.t
 t/pod.t
 t/textio.PL
-META.yml                                 Module meta-data (added by MakeMaker)
+t/v014_empty_link_text.t

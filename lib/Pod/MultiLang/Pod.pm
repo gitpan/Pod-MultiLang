@@ -5,7 +5,7 @@
 #
 # Copyright 2003 YMIRLINK,Inc.
 # -----------------------------------------------------------------------------
-# $Id: /perl/Pod-MultiLang/lib/Pod/MultiLang/Pod.pm 219 2006-11-15T14:02:45.773335Z hio  $
+# $Id: /perl/Pod-MultiLang/lib/Pod/MultiLang/Pod.pm 624 2008-02-06T09:15:55.362158Z hio  $
 # -----------------------------------------------------------------------------
 package Pod::MultiLang::Pod;
 use strict;
@@ -339,7 +339,12 @@ sub on_mlpod_link
 sub parse_mlpod
 {
   my ($parser,$ptree,$inlang) = @_;
+
+  # @ret[0..$#langs]: for that lang.
+  # $ret[-1], $ret[@langs]: fallback.
   my @ret = ((undef)x@{$parser->{langs}},'');
+
+  # find index for default lang.
   my $idx_default_lang = $parser->_find_lang_index($parser->{_default_lang})||0;
   
   if( can($ptree,'parse_tree') )
@@ -400,14 +405,15 @@ sub parse_mlpod
         $section = $name;
         $name = '';
       }
-      my $parselink = [$text,$inferred,$name,$section,$type];
       
       if( $content !~ /J\</ )
       {
-	my $link = $parser->on_mlpod_link($parselink,$_);
-	defined($ret[-1]) or $ret[-1] = '';
-	$ret[-1] .= $link;
-	next;
+        # if there is no J<> sequences.
+        my $parselink = [$text,$inferred,$name,$section,$type];
+        my $link = $parser->on_mlpod_link($parselink,$_);
+        defined($ret[-1]) or $ret[-1] = '';
+        $ret[-1] .= $link;
+        next;
       }
       
       my $line = ($_->file_line())[1];
@@ -435,22 +441,48 @@ sub parse_mlpod
 	}
 	$_ = \@child;
       }
+
       # 装飾符号の展開.
+      # expand interior sequences.
+      #
       my $cmd_name = $_->cmd_name();
-      my $sec_anchor = $$section[-1]||$$section[$idx_default_lang]||'';
       my $lang = $parser->{_langstack}[-1]||$parser->{_default_lang};
-      my $i = $parser->_find_lang_index($lang);
-      defined($i) or $i = $idx_default_lang;
-      {
-	my $text     = $$text[$i]   ||$$text[$idx_default_lang]   ||'';
-        my $name     = $$name[$i]   ||$$name[$idx_default_lang]   ||'';
-	my $section  = $$section[$i]||$$section[$idx_default_lang]||'';
-	
-        my $parselink = [$text,$inferred,$name,$section,$type];
-	my $link = $parser->on_mlpod_link($parselink,$_);
-	defined($ret[-1]) or $ret[-1] = '';
-	$ret[-1] .= $link;
-      }
+      my $idx = $parser->_find_lang_index($lang);
+      defined($idx) or $idx = $idx_default_lang;
+
+      my $select_proper_text = sub{
+        my $text1 = shift;
+        my $text2 = shift;
+        if( defined($text1) && $text1 ne '' )
+        {
+          $text1;
+        }elsif( defined($text2) && $text2 ne '' )
+        {
+          $text2;
+        }elsif( defined($text1) || defined($text2) )
+        {
+          '';
+        }else
+        {
+          undef;
+        }
+      };
+      my $text_lang = $text->[$idx];
+      my $text_def  = $text->[$idx_default_lang];
+      my $text_sel  = $select_proper_text->($text_lang, $text_def);
+
+      my $name_lang = $name->[$idx];
+      my $name_def  = $name->[$idx_default_lang];
+      my $name_sel  = $select_proper_text->($name_lang, $name_def);
+
+      my $section_lang = $section->[$idx];
+      my $section_def  = $$section[$idx_default_lang];
+      my $section_sel  = $select_proper_text->($section_lang, $section_def);
+      
+      my $parselink = [$text_sel,$inferred,$name_sel,$section_sel,$type];
+      my $link = $parser->on_mlpod_link($parselink,$_);
+      defined($ret[-1]) or $ret[-1] = '';
+      $ret[-1] .= $link;
       # if cmd_name eq 'L'
     }else
     {

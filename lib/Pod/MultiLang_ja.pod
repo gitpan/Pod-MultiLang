@@ -18,7 +18,7 @@ Pod::MultiLang_ja - 多言語対訳Pod
 
 =head1 バージョン
 
-Version 0.13
+Version 0.14
 
 
 =head1 概要
